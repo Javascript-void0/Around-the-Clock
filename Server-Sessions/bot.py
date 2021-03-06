@@ -5,7 +5,7 @@ from discord.ext import tasks, commands
 from discord.utils import get
 
 client = commands.Bot(command_prefix='.atc ')
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = os.getenv("SS_TOKEN")
 
 @client.event
 async def on_ready():

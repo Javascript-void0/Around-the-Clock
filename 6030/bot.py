@@ -7,7 +7,7 @@ from discord.utils import get
 client = commands.Bot(command_prefix='63 ')
 run = False
 show = False
-TOKEN = os.getenv("DISCORD_TOKEN")
+TOKEN = os.getenv("6030_TOKEN")
 
 @client.event
 async def on_ready():
@@ -78,11 +78,11 @@ async def _stop(ctx):
 async def rejoin(ctx):
     global run
     channel = ctx.author.voice.channel
-    voice = get(client.voice_clients, guild=ctx.guild)
+    get(client.voice_clients, guild=ctx.guild)
     
     if ctx.author.voice.channel:
         if run == True:
-            voice = await channel.connect()
+            await channel.connect()
         else:
             await ctx.send('You need to start a timer first `63 start`')
     else:
