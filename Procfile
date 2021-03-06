@@ -1,3 +1,3 @@
-worker: python 6030/bot.py
-worker: python Midnight/bot.py
-worker: python Server-Sessions/bot.py
+6030: python 6030/bot.py
+midnight: python Midnight/bot.py
+sessions: python Server-Sessions/bot.py
