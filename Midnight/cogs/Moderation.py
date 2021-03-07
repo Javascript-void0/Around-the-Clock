@@ -9,7 +9,7 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(aliases=['purge'], help='Clears ceratin number of messages')
+    @commands.command(aliases=['purge'], help='Clears certin number of messages')
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int):
         await ctx.channel.purge(limit=amount+1)

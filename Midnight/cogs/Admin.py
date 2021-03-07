@@ -42,8 +42,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def testvc(self, ctx):
         channel = ctx.author.voice.channel
-        voice = get(self.client.voice_clients, guild=ctx.guild)
-        voice = await channel.connect()
+        get(self.client.voice_clients, guild=ctx.guild)
+        await channel.connect()
 
     @commands.command(help='Test Bump')
     @commands.has_permissions(administrator=True)

@@ -14,8 +14,8 @@ async def on_ready():
     print('Started {0.user}'.format(client))
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
 
-@client.command(aliases=['start', 'pomo', 'pomodoro'], help='Starts the Timer')
-async def _start(ctx):
+@client.command(aliases=['join', 'pomo', 'pomodoro'], help='Starts the Timer')
+async def start(ctx):
     global run, show
 
     channel = ctx.author.voice.channel
@@ -63,8 +63,8 @@ async def _start(ctx):
             else:
                 t = 3601
 
-@client.command(aliases=['leave', 'stop', 'pause'], help='Stops the Timer')
-async def _stop(ctx):
+@client.command(aliases=['leave', 'pause'], help='Stops the Timer')
+async def stop(ctx):
     global run
     if run == True:
         run = False
@@ -89,8 +89,8 @@ async def rejoin(ctx):
         await ctx.send('You need to join a voice channel first')
 
 
-@client.command(aliases=['timer', 'time'], help='Shows the time remaining')
-async def _time(ctx):
+@client.command(aliases=['timer'], help='Shows the time remaining')
+async def time(ctx):
     global show
     if run == True:
         show = True

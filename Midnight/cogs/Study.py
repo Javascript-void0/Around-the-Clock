@@ -15,7 +15,7 @@ class Study(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        guild = self.client.get_guild(802565984602423367)
+        self.client.get_guild(802565984602423367)
         role = get(member.guild.roles, name="Studying")
         if before.channel is None:
             await member.add_roles(role)

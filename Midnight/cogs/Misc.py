@@ -11,7 +11,6 @@ class Misc(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f'**Current Ping:** {round(self.client.latency * 1000)}ms')
 
-'''
     @commands.command(aliases=['8ball'], help='Tell the future')
     async def _8ball(self, ctx, *, question):
         responses = [
@@ -24,7 +23,6 @@ class Misc(commands.Cog):
             'My sources say no.', 'Outlook not so good.', 'Very doubtful.'
         ]
         await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
-'''
 
 def setup(client):
     client.add_cog(Misc(client))
