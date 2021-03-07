@@ -68,7 +68,7 @@ class Study(commands.Cog):
             if(t == 1500):
                 response = random.choice(start_message)
                 await ctx.send("Hey <@{0}>! {1}".format(ctx.author.id, response))
-                voice.play(discord.FFmpegPCMAudio(source="alarm.mp3"))
+                voice.play(discord.FFmpegPCMAudio(source="asset/alarm.mp3"))
 
             elif(t == 600 and breakTime == False):
                 breakTime = True
@@ -77,7 +77,7 @@ class Study(commands.Cog):
                 if(breakTime):
                     response = random.choice(break_message)
                     await ctx.send("{1} <@{0}>!".format(ctx.author.id, response))
-                    voice.play(discord.FFmpegPCMAudio(source="alarm.mp3"))
+                    voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
                     t = 301
                     breakTime = False
                 else:
@@ -97,7 +97,7 @@ class Study(commands.Cog):
         specialBreakTime = True
         await ctx.send("Starting Break Time now!")
         voice = get(self.client.voice_clients, guild=ctx.guild)
-        voice.play(discord.FFmpegPCMAudio(source="alarm.mp3"))
+        voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
 
     @commands.command(help='Displays time remaining') 
     async def time(self, ctx):
@@ -110,7 +110,7 @@ class Study(commands.Cog):
         channel = ctx.author.voice.channel
         voice = get(self.client.voice_clients, guild=ctx.guild)
         voice = await channel.connect()
-        voice.play(discord.FFmpegPCMAudio(source="lofi.mp3"))
+        voice.play(discord.FFmpegPCMAudio(source="asset/lofi.mp3"))
 
 def setup(client):
     client.add_cog(Study(client))

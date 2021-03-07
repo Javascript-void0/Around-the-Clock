@@ -41,7 +41,7 @@ async def start(ctx):
             show = False
 
         if t == 3600:
-            voice.play(discord.FFmpegPCMAudio(source="alarm.mp3"))
+            voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
             await ctx.send("<@{0}>! Study Time!".format(ctx.author.id))
 
         elif t == 10:
@@ -59,7 +59,7 @@ async def start(ctx):
             if Break == True:
                 t = 1801
                 await ctx.send("<@{0}> Break Time!".format(ctx.author.id))
-                voice.play(discord.FFmpegPCMAudio(source="alarm.mp3"))
+                voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
             else:
                 t = 3601
 

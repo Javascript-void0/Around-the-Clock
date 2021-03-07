@@ -33,7 +33,7 @@ async def timer_start():
 
         if t == 1500:
             await member.edit(nick='Time Left: 25m 0s')
-            voice.play(discord.FFmpegPCMAudio(source="alarm.mp3"))
+            voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
 
         elif t == 10:
             if r == 0:
@@ -58,10 +58,10 @@ async def timer_start():
                 r = 0
             if shortBreak == True:
                 t = 301
-                voice.play(discord.FFmpegPCMAudio(source="alarm.mp3"))
+                voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
             elif longBreak == True:
                 t = 901
-                voice.play(discord.FFmpegPCMAudio(source="alarm.mp3"))
+                voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
             else:
                 t = 1501
 
