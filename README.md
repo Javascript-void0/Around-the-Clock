@@ -8,8 +8,6 @@
  
 ##### Around the Clock is a server that focuses on studying with others. Join others to share and get some work done. We are available to help and push you to success. :D
 
-#
-
 ## 🌙 Midnight ψ(｀∇´)ψ
 
 General moderation/tasks/events used throughout the server.  
@@ -22,15 +20,11 @@ General moderation/tasks/events used throughout the server.
 
 ##### Moderation - `12 clear` `12 whois` `12 kick` `12 ban` `12 unban` `12 mute`
 
-#
-
 ## ⏰ Server Sessions
 
 Server Sessions stays in a Voice Channel and shows a Pomodoro timer indefinately... forever...
 
 ##### Commands - `No Commands`
-
-#
 
 ## ⏳ [60/30]
 

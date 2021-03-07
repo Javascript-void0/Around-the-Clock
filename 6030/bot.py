@@ -14,7 +14,7 @@ async def on_ready():
     print('Started {0.user}'.format(client))
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
 
-@client.command(aliases=['join', 'pomo', 'pomodoro'], help='Starts the Timer')
+@client.command(aliases=['pomo', 'pomodoro'], help='Starts the Timer')
 async def start(ctx):
     global run, show
 
