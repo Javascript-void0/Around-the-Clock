@@ -38,7 +38,7 @@ class Events(commands.Cog):
         channel = guild.get_channel(802577298267963412)
         embed = discord.Embed(title = "Disboard is off cooldown!", description  = "Time to bump! 🍌", color = discord.Color.dark_blue())
         embed.set_thumbnail(url="https://i.pinimg.com/originals/ee/b0/e6/eeb0e632af64b76830c5777e07770202.png")
-        if message.author.id == 302050872383242240:
+        if message.author.id == 302050872383242240 and 'done' in message.embeds[0].description:
             cd = 7200
             while cd >= 0:
                 cd = cd-5
