@@ -17,10 +17,12 @@ class Events(commands.Cog):
         await member.add_roles(role)
 
         # Welcome
-        embed = discord.Embed(title = "Yawn... Oh! Welcome :D", description = f"Make sure to verify first... {member.mention}", color = discord.Color.blue())
+        r = guild.get_channel(802581706816487474)
+        lobby = guild.get_channel(802565985055014956)
+        embed = discord.Embed(title = "Yawn... Oh! Welcome :D", description = f"Welcome to Around the Clock {member.mention}!\nFirst Verify in {r.mention} :D\nThen Grab Some Roles, or hangout in {lobby.mention}", color = discord.Color.dark_teal())
         embed.set_thumbnail(url=member.avatar_url)
-        embed.set_image(url="https://media3.giphy.com/media/pVGsAWjzvXcZW4ZBTE/giphy.gif")
-        embed.set_footer(text="Enjoy Your Stay", icon_url = member.avatar_url)
+        embed.set_image(url="https://64.media.tumblr.com/752e98a41362e1c7e51c7a50a78c179c/f56cd24a7cd794d6-54/s2048x3072_c0,0,100000,85880/782343118d50eddb426ac93204cac586f38469cd.gif")
+        embed.set_footer(text="Enjoy Your Stay", icon_url = "https://media.tenor.com/images/dae19cf6b07682c4acf67dfc880f11f5/tenor.gif")
         await channel.send(embed=embed)
 
     @commands.Cog.listener()
@@ -33,16 +35,18 @@ class Events(commands.Cog):
         await self.client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
 
     @commands.Cog.listener()
-    async def on_message(self, ctx, message):
+    async def on_message(self, message):
         embed = discord.Embed(title = "Disboard is off cooldown!", description  = "Time to bump! 🍌", color = discord.Color.dark_blue())
         embed.set_thumbnail(url="https://i.pinimg.com/originals/ee/b0/e6/eeb0e632af64b76830c5777e07770202.png")
+        channel = message.channel
         if message.author.id == 302050872383242240 and 'done' in message.embeds[0].description:
+            await message.add_reactions("✅")
             cd = 7201
             while cd >= 0:
                 cd = cd-5
                 await asyncio.sleep(5)
                 if cd == 0:
-                    await ctx.send(embed=embed)
+                    await channel.send(embed=embed)
         else:
             pass
 

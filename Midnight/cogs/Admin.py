@@ -32,10 +32,13 @@ class Admin(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def testwelcome(self, ctx):
         member = ctx.author
-        embed = discord.Embed(title = "Yawn... Oh! Welcome :D", description = f"Make sure to verify first... {member.mention}", color = discord.Color.blue())
+        guild = self.client.get_guild(802565984602423367)
+        role = guild.get_channel(802581706816487474)
+        lobby = guild.get_channel(802565985055014956)
+        embed = discord.Embed(title = "Yawn... Oh! Welcome :D", description = f"Welcome to Around the Clock {member.mention}!\nFirst Verify in {role.mention} :D\nThen Grab Some Roles, or hangout in {lobby.mention}", color = discord.Color.dark_teal())
         embed.set_thumbnail(url=member.avatar_url)
-        embed.set_image(url="https://media3.giphy.com/media/pVGsAWjzvXcZW4ZBTE/giphy.gif")
-        embed.set_footer(text="Enjoy Your Stay", icon_url = member.avatar_url)
+        embed.set_image(url="https://64.media.tumblr.com/752e98a41362e1c7e51c7a50a78c179c/f56cd24a7cd794d6-54/s2048x3072_c0,0,100000,85880/782343118d50eddb426ac93204cac586f38469cd.gif")
+        embed.set_footer(text="Enjoy Your Stay", icon_url = "https://media.tenor.com/images/dae19cf6b07682c4acf67dfc880f11f5/tenor.gif")
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['testconnect','testcon'], help='Test Join')
