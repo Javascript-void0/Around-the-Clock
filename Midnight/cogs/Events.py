@@ -33,18 +33,16 @@ class Events(commands.Cog):
         await self.client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
 
     @commands.Cog.listener()
-    async def on_message(self, message):
-        guild = self.client.get_guild(802565984602423367)
-        channel = guild.get_channel(802577298267963412)
+    async def on_message(self, ctx, message):
         embed = discord.Embed(title = "Disboard is off cooldown!", description  = "Time to bump! 🍌", color = discord.Color.dark_blue())
         embed.set_thumbnail(url="https://i.pinimg.com/originals/ee/b0/e6/eeb0e632af64b76830c5777e07770202.png")
         if message.author.id == 302050872383242240 and 'done' in message.embeds[0].description:
-            cd = 7200
+            cd = 7201
             while cd >= 0:
                 cd = cd-5
                 await asyncio.sleep(5)
                 if cd == 0:
-                    await channel.send(embed=embed)
+                    await ctx.send(embed=embed)
         else:
             pass
 
