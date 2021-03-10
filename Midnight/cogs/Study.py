@@ -68,7 +68,7 @@ class Study(commands.Cog):
             if(t == 1500):
                 response = random.choice(start_message)
                 await ctx.send("Hey <@{0}>! {1}".format(ctx.author.id, response))
-                voice.play(discord.FFmpegPCMAudio(source="asset/alarm.mp3"))
+                voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
 
             elif(t == 600 and breakTime == False):
                 breakTime = True
@@ -110,7 +110,7 @@ class Study(commands.Cog):
         channel = ctx.author.voice.channel
         voice = get(self.client.voice_clients, guild=ctx.guild)
         voice = await channel.connect()
-        voice.play(discord.FFmpegPCMAudio(source="asset/lofi.mp3"))
+        voice.play(discord.FFmpegPCMAudio(source="assets/lofi.mp3"))
 
 def setup(client):
     client.add_cog(Study(client))
