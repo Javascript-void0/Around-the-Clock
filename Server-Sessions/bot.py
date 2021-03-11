@@ -11,7 +11,7 @@ TOKEN = os.getenv("SS_TOKEN")
 @client.event
 async def on_ready():
     print('Started {0.user}'.format(client))
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
+    await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
 
 @tasks.loop(seconds=1.0)
 async def timer_start():
@@ -34,7 +34,6 @@ async def timer_start():
         m, s = divmod(t,60)
 
         if t == 1500:
-            print('test')
             voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
 
         elif t == 10:
