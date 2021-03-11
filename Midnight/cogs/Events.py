@@ -40,7 +40,6 @@ class Events(commands.Cog):
         embed.set_thumbnail(url="https://i.pinimg.com/originals/ee/b0/e6/eeb0e632af64b76830c5777e07770202.png")
         channel = message.channel
         if message.author.id == 302050872383242240 and 'done' in message.embeds[0].description:
-            await message.add_reactions("✅")
             cd = 7201
             while cd >= 0:
                 cd = cd-5
