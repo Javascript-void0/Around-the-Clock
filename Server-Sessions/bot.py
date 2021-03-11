@@ -1,6 +1,7 @@
 import discord
 import os
 import asyncio
+import time
 from discord.ext import tasks, commands
 from discord.utils import get
 
@@ -12,7 +13,7 @@ async def on_ready():
     print('Started {0.user}'.format(client))
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
 
-@tasks.loop(minutes=1.0)
+@tasks.loop(seconds=1.0)
 async def timer_start():
 
     guild = client.get_guild(802565984602423367)
@@ -30,9 +31,10 @@ async def timer_start():
         await asyncio.sleep(1) 
         t -= 1
         print(t)
+        m, s = divmod(t,60)
 
         if t == 1500:
-            await member.edit(nick='Time Left: 25m 0s')
+            print('test')
             voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
 
         elif t == 10:
@@ -65,21 +67,12 @@ async def timer_start():
             else:
                 t = 1501
 
-        elif t % 30 == 0:
-            if t % 60 == 0:
-                m = t // 60
-                s = 0
-            else:
-                m = t // 30
-                m -= 1
-                m = m // 2
-                s = 30
-            if longBreak == True:
-                await member.edit(nick='Long Break: {}m {}s'.format(m,s))
-            elif shortBreak == True:
-                await member.edit(nick='Short Break: {}m {}s'.format(m,s))    
-            else:
-                await member.edit(nick='Time Left: {}m {}s'.format(m,s))
+        if longBreak == True:
+            await member.edit(nick='Long Break: {:02}m {:02}s'.format(m,s))
+        elif shortBreak == True:
+            await member.edit(nick='Short Break: {:02}m {:02}s'.format(m,s))    
+        else:
+            await member.edit(nick='Time Left: {:02}m {:02}s'.format(m,s))
 
 @timer_start.before_loop
 async def before_timer_start():
