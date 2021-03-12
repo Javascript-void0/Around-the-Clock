@@ -34,6 +34,7 @@ class Events(commands.Cog):
         print('Started {0.user}'.format(self.client))
         await self.client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
 
+''' Seperate Bot
     @commands.Cog.listener()
     async def on_message(self, message):
         embed = discord.Embed(title = "Disboard is off cooldown!", description  = "Time to bump! 🍌", color = discord.Color.dark_blue())
@@ -48,6 +49,7 @@ class Events(commands.Cog):
                     await channel.send(embed=embed)
         else:
             pass
+'''
 
 def setup(client):
     client.add_cog(Events(client))

@@ -19,6 +19,11 @@ async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     await ctx.send(f'Unloaded {extension}')
 
+async def save_audit_logs(guild):
+    async for entry in guild.audit_logs(limit=100):
+        channel = guild.get_channel(802576537177030686)
+        await channel.send('{0.user} did {0.action} to {0.target}'.format(entry))
+
 for filename in os.listdir('./Midnight/cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
