@@ -36,7 +36,7 @@ async def timer_start():
         if t == 1500:
             voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
 
-        elif t == 10:
+        elif t == 0:
             if r == 0:
                 shortBreak = False
                 longBreak = False
@@ -52,8 +52,6 @@ async def timer_start():
             elif r % 2 == 1:
                 shortBreak = True
                 longBreak = False
-
-        elif t == 0:
             r += 1
             if r == 10:
                 r = 0
