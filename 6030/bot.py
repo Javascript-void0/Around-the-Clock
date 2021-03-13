@@ -46,7 +46,7 @@ async def start(ctx):
 
         elif t == 10:
             if r == 0:
-                Break = False
+                Break = True
             elif r == 1:
                 Break = True
             elif r % 2 == 0:
