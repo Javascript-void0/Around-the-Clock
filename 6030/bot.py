@@ -27,7 +27,6 @@ async def start(ctx):
 
     Break = False
     t = 3601
-    r = 1
     run = True
 
     while run == True:
@@ -45,15 +44,12 @@ async def start(ctx):
             await ctx.send("<@{0}>! Study Time!".format(ctx.author.id))
 
         elif t == 10:
-            if r == 1:
+            if Break == True:
                 Break = False
-            elif r % 2 == 0:
+            else:
                 Break = True
-            elif r % 2 == 1:
-                Break = False
 
         elif t == 0:
-            r += 1
             if Break == True:
                 t = 1801
                 await ctx.send("<@{0}> Break Time!".format(ctx.author.id))
