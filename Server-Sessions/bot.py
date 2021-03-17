@@ -20,23 +20,21 @@ async def timer_start():
     channel = guild.get_channel(802567364658855976)
     voice = get(client.voice_clients, guild=guild)
     voice = await channel.connect()
+    voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
     member = guild.me
 
     shortBreak = False
     longBreak = False
-    t = 1501
+    t = 1500
     r = 1
 
     while True:
-        await asyncio.sleep(1) 
-        t -= 1
+        await asyncio.sleep(5) 
+        t -= 5
         print(t)
         m, s = divmod(t,60)
 
-        if t == 1500:
-            voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
-
-        elif t == 0:
+        if t == 0:
             if r == 0:
                 shortBreak = False
                 longBreak = False
@@ -56,13 +54,14 @@ async def timer_start():
             if r == 10:
                 r = 0
             if shortBreak == True:
-                t = 301
+                t = 300
                 voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
             elif longBreak == True:
-                t = 901
+                t = 900
                 voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
             else:
-                t = 1501
+                t = 1500
+                voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
 
         if longBreak == True:
             await member.edit(nick='Long Break: {:02}m {:02}s'.format(m,s))
