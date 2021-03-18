@@ -48,7 +48,7 @@ async def on_member_join(member):
     await log_channel.send(embed=embed)
 
 @client.event
-async def on_member_leave(member):
+async def on_member_remove(member):
     log_channel = client.get_channel(802577837365133312)
     d,t = get_dt()
     embed = discord.Embed(title='[ - ] Member Left', description='{} {}#{}'.format(member.mention, member.display_name, member.discriminator))
