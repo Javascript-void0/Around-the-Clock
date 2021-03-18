@@ -51,7 +51,7 @@ async def on_member_join(member):
 async def on_member_leave(member):
     log_channel = client.get_channel(802577837365133312)
     d,t = get_dt()
-    embed = discord.Embed(title='[ - ] Member Joined', description='{} {}#{}'.format(member.mention, member.display_name, member.discriminator))
+    embed = discord.Embed(title='[ - ] Member Left', description='{} {}#{}'.format(member.mention, member.display_name, member.discriminator))
     embed.set_footer(text=f'{d}, {t} | {member.id}')
     await log_channel.send(embed=embed)
 
