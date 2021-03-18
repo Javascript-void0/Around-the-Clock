@@ -74,7 +74,7 @@ async def on_message_edit(before, after):
     elif before.channel == todo:
         pass
     else:
-        embed = discord.Embed(title='[ + ] Message Edited', description='{} edited a [message]({}) in {}\n`01` - From **{}** `02` - To **{}**'.format(before.author.mention, before.jump_url, before.channel.mention, before.content, after.content))
+        embed = discord.Embed(title='[ + ] Message Edited', description='{} edited a [message]({}) in {}\n`01` - From **{}**\n`02` - To **{}**'.format(before.author.mention, before.jump_url, before.channel.mention, before.content, after.content))
         embed.set_footer(text=f'{d}, {t}')
         await log_channel.send(embed=embed)
 
