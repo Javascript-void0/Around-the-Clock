@@ -69,7 +69,9 @@ async def on_message_edit(before, after):
     todo = client.get_channel(806150413773963275)
     d,t = get_dt()
 
-    if before.channel == log_channel:
+    if before.author.bot:
+        pass
+    elif before.channel == log_channel:
         pass
     elif before.channel == todo:
         pass
