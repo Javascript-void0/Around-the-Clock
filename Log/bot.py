@@ -33,6 +33,12 @@ def typeRename(channel):
         tp = 'Voice Channel'
     return tp
 
+def guildCheck(event):
+    if event.guild.id == 802565984602423367:
+        return True
+    else:
+        return False
+
 @client.event
 async def on_ready():
     print('[ + ] Started {0.user}'.format(client))
@@ -40,110 +46,116 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
-    log_channel = client.get_channel(802577837365133312)
-    created = member.created_at.strftime("%b %d, %Y")
-    d,t = get_dt()
-    embed = discord.Embed(title='[ + ] Member Joined', description='{} {}#{}\n`01` - Account Created on **{}**'.format(member.mention, member.display_name, member.discriminator, created))
-    embed.set_footer(text=f'{d}, {t} | {member.id}')
-    await log_channel.send(embed=embed)
+    if guildCheck(member) == True:
+        log_channel = client.get_channel(802577837365133312)
+        created = member.created_at.strftime("%b %d, %Y")
+        d,t = get_dt()
+        embed = discord.Embed(title='[ + ] Member Joined', description='{} {}#{}\n`01` - Account Created on **{}**'.format(member.mention, member.display_name, member.discriminator, created))
+        embed.set_footer(text=f'{d}, {t} | {member.id}')
+        await log_channel.send(embed=embed)
 
 @client.event
 async def on_member_remove(member):
-    log_channel = client.get_channel(802577837365133312)
-    d,t = get_dt()
-    embed = discord.Embed(title='[ - ] Member Left', description='{} {}#{}'.format(member.mention, member.display_name, member.discriminator))
-    embed.set_footer(text=f'{d}, {t} | {member.id}')
-    await log_channel.send(embed=embed)
+    if guildCheck(member) == True:
+        log_channel = client.get_channel(802577837365133312)
+        d,t = get_dt()
+        embed = discord.Embed(title='[ - ] Member Left', description='{} {}#{}'.format(member.mention, member.display_name, member.discriminator))
+        embed.set_footer(text=f'{d}, {t} | {member.id}')
+        await log_channel.send(embed=embed)
 
 @client.event
 async def on_message_delete(message):
-    log_channel = client.get_channel(802577837365133312)
-    d,t = get_dt()
-    embed = discord.Embed(title='[ - ] Message Deleted', description='{} deleted a message in {}\n`01` - {}'.format(message.author.mention, message.channel.mention, message.content))
-    embed.set_footer(text=f'{d}, {t}')
-    await log_channel.send(embed=embed)
-
-@client.event
-async def on_message_edit(before, after):
-    log_channel = client.get_channel(802577837365133312)
-    todo = client.get_channel(806150413773963275)
-    d,t = get_dt()
-
-    if before.author.bot:
-        pass
-    elif before.channel == log_channel:
-        pass
-    elif before.channel == todo:
-        pass
-    else:
-        embed = discord.Embed(title='[ + ] Message Edited', description='{} edited a [message]({}) in {}\n`01` - From **{}**\n`02` - To **{}**'.format(before.author.mention, before.jump_url, before.channel.mention, before.content, after.content))
+    if guildCheck(message) == True:
+        log_channel = client.get_channel(802577837365133312)
+        d,t = get_dt()
+        embed = discord.Embed(title='[ - ] Message Deleted', description='{} deleted a message in {}\n`01` - {}'.format(message.author.mention, message.channel.mention, message.content))
         embed.set_footer(text=f'{d}, {t}')
         await log_channel.send(embed=embed)
 
 @client.event
+async def on_message_edit(before, after):
+    if guildCheck(before) == True:
+        log_channel = client.get_channel(802577837365133312)
+        d,t = get_dt()
+
+        if before.author.bot:
+            pass
+        elif before.channel == log_channel:
+            pass
+        elif before.channel.id == 806150413773963275:
+            pass
+        else:
+            embed = discord.Embed(title='[ + ] Message Edited', description='{} edited a [message]({}) in {}\n`01` - From **{}**\n`02` - To **{}**'.format(before.author.mention, before.jump_url, before.channel.mention, before.content, after.content))
+            embed.set_footer(text=f'{d}, {t}')
+            await log_channel.send(embed=embed)
+
+@client.event
 async def on_guild_channel_delete(channel):
-    log_channel = client.get_channel(802577837365133312)
-    entry = await channel.guild.audit_logs(action=discord.AuditLogAction.channel_delete, limit=1).get()
-    d,t = get_dt()
-    embed = discord.Embed(title='[ - ] Channel Deleted', description='{} removed #{}'.format(entry.user.mention, channel.name))
-    embed.set_footer(text=f'{d}, {t}')
-    await log_channel.send(embed=embed)
+    if guildCheck(channel) == True:
+        log_channel = client.get_channel(802577837365133312)
+        entry = await channel.guild.audit_logs(action=discord.AuditLogAction.channel_delete, limit=1).get()
+        d,t = get_dt()
+        embed = discord.Embed(title='[ - ] Channel Deleted', description='{} removed #{}'.format(entry.user.mention, channel.name))
+        embed.set_footer(text=f'{d}, {t}')
+        await log_channel.send(embed=embed)
 
 @client.event
 async def on_guild_channel_create(channel):
-    log_channel = client.get_channel(802577837365133312)
-    entry = await channel.guild.audit_logs(action=discord.AuditLogAction.channel_create, limit=1).get()
+    if guildCheck(channel) == True:
+        log_channel = client.get_channel(802577837365133312)
+        entry = await channel.guild.audit_logs(action=discord.AuditLogAction.channel_create, limit=1).get()
 
-    if channel.type == discord.ChannelType.text:
-        tp = 'Text Channel'
-        slow = channel.slowmode_delay
-        n = nsfw(channel.nsfw)
-        if slow == 0:
-            slow = 'disabled'
+        if channel.type == discord.ChannelType.text:
+            tp = 'Text Channel'
+            slow = channel.slowmode_delay
+            n = nsfw(channel.nsfw)
+            if slow == 0:
+                slow = 'disabled'
 
-    elif channel.type == discord.ChannelType.news:
-        tp = 'Announcement Channel'
-        n = nsfw(channel.nsfw)
+        elif channel.type == discord.ChannelType.news:
+            tp = 'Announcement Channel'
+            n = nsfw(channel.nsfw)
 
-    elif channel.type == discord.ChannelType.voice:
-        tp = 'Voice Channel'
+        elif channel.type == discord.ChannelType.voice:
+            tp = 'Voice Channel'
 
-    if tp == 'Voice Channel':
-        embed = discord.Embed(title='[ + ] Channel Created', description='{} created a voice channel **{}**\n`01` - Set the name to **{}**\n`02` - Set the type to **{}**\n`03` - Set the bitrate of **{}**\n`04` - Set the user limit of **{}**'.format(entry.user.mention, channel.name, channel.name, tp, channel.bitrate//1000, channel.user_limit))
-    else:
-        embed = discord.Embed(title='[ + ] Channel Created', description='{} created a text channel **#{}**\n`01` - Set the name to **{}**\n`02` - Set the type to **{}**\n`03` - {} the channel as NSFW\n`04` - Set slowmode {}'.format(entry.user.mention, channel.name, channel.name, tp, n, slow))
-    
-    d,t = get_dt()
-    embed.set_footer(text=f'{d}, {t}')
-    await log_channel.send(embed=embed)
+        if tp == 'Voice Channel':
+            embed = discord.Embed(title='[ + ] Channel Created', description='{} created a voice channel **{}**\n`01` - Set the name to **{}**\n`02` - Set the type to **{}**\n`03` - Set the bitrate of **{}**\n`04` - Set the user limit of **{}**'.format(entry.user.mention, channel.name, channel.name, tp, channel.bitrate//1000, channel.user_limit))
+        else:
+            embed = discord.Embed(title='[ + ] Channel Created', description='{} created a text channel **#{}**\n`01` - Set the name to **{}**\n`02` - Set the type to **{}**\n`03` - {} the channel as NSFW\n`04` - Set slowmode {}'.format(entry.user.mention, channel.name, channel.name, tp, n, slow))
+        
+        d,t = get_dt()
+        embed.set_footer(text=f'{d}, {t}')
+        await log_channel.send(embed=embed)
 
 @client.event
 async def on_guild_channel_update(before, after):
+    if guildCheck(before) == True:
 
-    if before.type == discord.ChannelType.voice:
-        x = '`01` - Changed the name from **{}** to **{}**'.format(before.name, after.name)
-    else:
-        if before.topic != after.topic:
-            x = '`01` - Changed the topic to **{}**'.format(after.topic)
-        if before.nsfw != after.nsfw:
-            n = nsfw(after.nsfw)
-            x = '`01` - {} the channel as NSFW'.format(n)
-        if before.slowmode_delay != after.slowmode_delay:
-            x = '`01` - Set slowmode to **{}**'.format(after.slowmode_delay//1000)
-        if before.type != after.type:
-            b = typeRename(before.type)
-            a = typeRename(after.type)
-            x = '`01` - Changed the type from **{}** to **{}**'.format(b, a)
-        if before.name != after.name:
+        if before.type == discord.ChannelType.voice:
             x = '`01` - Changed the name from **{}** to **{}**'.format(before.name, after.name)
-        
-    log_channel = client.get_channel(802577837365133312)
-    guild = client.get_guild(802565984602423367)
-    entry = await guild.audit_logs(action=discord.AuditLogAction.channel_update, limit=1).get()
-    embed = discord.Embed(title='[ + ] Channel Updated', description='{} made changes to **#{}**\n{}'.format(entry.user.mention, before, x))
-    d,t = get_dt()
-    embed.set_footer(text=f'{d}, {t}')
-    await log_channel.send(embed=embed)
+        else:
+            if before.topic != after.topic:
+                x = '`01` - Changed the topic to **{}**'.format(after.topic)
+            if before.nsfw != after.nsfw:
+                n = nsfw(after.nsfw)
+                x = '`01` - {} the channel as NSFW'.format(n)
+            if before.slowmode_delay != after.slowmode_delay:
+                x = '`01` - Set slowmode to **{}**'.format(after.slowmode_delay//1000)
+            if before.type != after.type:
+                b = typeRename(before.type)
+                a = typeRename(after.type)
+                x = '`01` - Changed the type from **{}** to **{}**'.format(b, a)
+            if before.name != after.name:
+                x = '`01` - Changed the name from **{}** to **{}**'.format(before.name, after.name)
+            
+        log_channel = client.get_channel(802577837365133312)
+        guild = client.get_guild(802565984602423367)
+        entry = await guild.audit_logs(action=discord.AuditLogAction.channel_update, limit=1).get()
+        embed = discord.Embed(title='[ + ] Channel Updated', description='{} made changes to **#{}**\n{}'.format(entry.user.mention, before, x))
+        d,t = get_dt()
+        embed.set_footer(text=f'{d}, {t}')
+        await log_channel.send(embed=embed)
 
 '''
 @client.event
