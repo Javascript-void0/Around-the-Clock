@@ -13,10 +13,10 @@ class Misc(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f'**Current Ping:** {round(self.client.latency * 1000)}ms')
 
-    @commands.command(aliases=['8ball'], help='Tell the future')
+    @commands.command(name='8ball', help='Tell the future')
     async def _8ball(self, ctx, *, question):
         responses = [
-            'It is ceratin.', 'It is decidedly so.', 'Without a doubt.',
+            'It is certain.', 'It is decidedly so.', 'Without a doubt.',
             'You may rely on it.', 'As I see it, yes.', 'Most likely.',
             'Outlook good.', 'Yes.', 'Signs point to yes.',
             'Reply hazy, try again.', 'Ask again later.',
@@ -25,6 +25,11 @@ class Misc(commands.Cog):
             'My sources say no.', 'Outlook not so good.', 'Very doubtful.'
         ]
         await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
+
+    @_8ball.error
+    async def _8ball_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send('Usage: `12 8ball <question>`')
 
     @commands.command(help='Returns the number of members online')
     async def online(self, ctx):
@@ -96,25 +101,28 @@ class Misc(commands.Cog):
         wEmbed = discord.Embed(title=f"{ctx.author.name}'s winning high-low game\nYou won!", description=f'Your hint was **{hint}**. The hidden number was **{num}**.', color=discord.Color.green())
         wEmbed.set_footer(text='Multi Bonus: +0% (⏣69)')
 
-        input = await self.client.wait_for('message', check=None, timeout=3)
+        try:
+            input = await self.client.wait_for('message', check=None, timeout=3)
 
-        elif input.content == "high":
-            if num > hint:
-                await ctx.send(embed=wEmbed)
+            if input.content == "high":
+                if num > hint:
+                    await ctx.send(embed=wEmbed)
+                else:
+                    await ctx.send(embed=lEmbed)
+            elif input.content == "low":
+                if num < hint:
+                    await ctx.send(embed=wEmbed)
+                else:
+                    await ctx.send(embed=lEmbed)
+            elif input.content == "jackpot":
+                if num == hint:
+                    await ctx.send(embed=wEmbed)
+                else:
+                    await ctx.send(embed=lEmbed)
             else:
-                await ctx.send(embed=lEmbed)
-        elif input.content == "low":
-            if num < hint:
-                await ctx.send(embed=wEmbed)
-            else:
-                await ctx.send(embed=lEmbed)
-        elif input.content == "jackpot":
-            if num == hint:
-                await ctx.send(embed=wEmbed)
-            else:
-                await ctx.send(embed=lEmbed)
-        else:
-            await ctx.send(f'{ctx.author.mention} Hey your options to respond are "high", "low", and "jackpot". Run the command again with more brain cells next time. (Number was {num} btw)')
-
+                await ctx.send(f'{ctx.author.mention} Hey your options to respond are "high", "low", and "jackpot". Run the command again with more brain cells next time. (Number was {num} btw)')
+        except asyncio.TimeoutError:
+            await ctx.send('Imagine not answering')
+            
 def setup(client):
     client.add_cog(Misc(client))

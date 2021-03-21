@@ -91,7 +91,7 @@ class Study(commands.Cog):
         voice = get(self.client.voice_clients, guild=ctx.guild)
         voice = await voice.disconnect()
 
-    @commands.command(aliases=['break'], help='Starts break timer')
+    @commands.command(name='break', help='Starts break timer')
     async def _break(self, ctx):
         global specialBreakTime 
         specialBreakTime = True
