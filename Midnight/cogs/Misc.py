@@ -1,5 +1,7 @@
 import discord
 import random
+import asyncio
+from random import randint
 from discord.ext import commands
 
 class Misc(commands.Cog):
@@ -80,6 +82,39 @@ class Misc(commands.Cog):
     @commands.command(help='Sever Invite Link')
     async def invite(self, ctx):
         await ctx.send('https://discord.gg/nk69jVbJMP')
+
+    @commands.command(help='High-low Game (Dank Memer)')
+    async def highlow(self, ctx):
+        num = randint(1,100)
+        hint = randint(1,100)
+        embed = discord.Embed(title=f"{ctx.author.name}'s high-low game", description=f'A number secret between 1-100 has been chosen. Your hint is **{hint}**.\nRespond with "high", "low", or "jackpot".')
+        embed.set_footer(text='Choose whether you think the hidden number is higher, lower, or the same number as the hint')
+        await ctx.send(embed=embed)
+
+        lEmbed = discord.Embed(title=f"{ctx.author.name}'s losing high-low game\nYou lost!", description=f'Your hint was **{hint}**. The hidden number was **{num}**.', color=discord.Color.red())
+        lEmbed.set_footer(text='loser loser')
+        wEmbed = discord.Embed(title=f"{ctx.author.name}'s winning high-low game\nYou won!", description=f'Your hint was **{hint}**. The hidden number was **{num}**.', color=discord.Color.green())
+        wEmbed.set_footer(text='Multi Bonus: +0% (⏣69)')
+
+        input = await self.client.wait_for('message', check=None, timeout=3)
+
+        elif input.content == "high":
+            if num > hint:
+                await ctx.send(embed=wEmbed)
+            else:
+                await ctx.send(embed=lEmbed)
+        elif input.content == "low":
+            if num < hint:
+                await ctx.send(embed=wEmbed)
+            else:
+                await ctx.send(embed=lEmbed)
+        elif input.content == "jackpot":
+            if num == hint:
+                await ctx.send(embed=wEmbed)
+            else:
+                await ctx.send(embed=lEmbed)
+        else:
+            await ctx.send(f'{ctx.author.mention} Hey your options to respond are "high", "low", and "jackpot". Run the command again with more brain cells next time. (Number was {num} btw)')
 
 def setup(client):
     client.add_cog(Misc(client))
