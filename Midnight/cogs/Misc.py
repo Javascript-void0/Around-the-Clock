@@ -102,7 +102,7 @@ class Misc(commands.Cog):
         wEmbed.set_footer(text='Multi Bonus: +0% (⏣69)')
 
         try:
-            input = await self.client.wait_for('message', check=None, timeout=3)
+            input = await self.client.wait_for('message', check=None, timeout=30)
 
             if input.content == "high":
                 if num > hint:
