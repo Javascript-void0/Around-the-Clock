@@ -38,4 +38,4 @@ Custom Logging Bot because it looks better :D
 
 ## 💡 Ideas
 
-- [ ] Account Age in Log Bot Joins
+- [x] Account Age in Log Bot Joins

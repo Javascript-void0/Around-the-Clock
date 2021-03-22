@@ -1,7 +1,7 @@
 import discord
 import os
 import time
-from datetime import datetime
+import datetime
 from discord.ext import commands
 from discord.utils import get
 
@@ -50,7 +50,12 @@ async def on_member_join(member):
         log_channel = client.get_channel(802577837365133312)
         created = member.created_at.strftime("%b %d, %Y")
         d,t = get_dt()
-        embed = discord.Embed(title='[ + ] Member Joined', description='{} {}#{}\n`01` - Account Created on **{}**'.format(member.mention, member.display_name, member.discriminator, created))
+
+        today = datetime.date.today()
+        timeAgo = member.created_at.date()
+        delta = today - timeAgo
+
+        embed = discord.Embed(title='[ + ] Member Joined', description='{} {}#{}\n`01` - Account Created on **{}**\n`02` - Account Created **{}** Days Ago'.format(member.mention, member.display_name, member.discriminator, created, delta.days))
         embed.set_footer(text=f'{d}, {t} | {member.id}')
         await log_channel.send(embed=embed)
 
