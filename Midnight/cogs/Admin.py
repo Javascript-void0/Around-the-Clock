@@ -1,6 +1,6 @@
 import discord
 import asyncio
-from datetime import datetime
+import datetime
 from discord.ext import tasks, commands
 from discord.utils import get
 
@@ -18,13 +18,12 @@ class Admin(commands.Cog):
 
     @commands.command(aliases=['cl'], help='Input for Changlogs')
     @commands.has_role("Admin")
-    async def changelog(self, ctx, date, message):
-        guild = self.client.get_guild(802565984602423367)
-        channel = guild.get_channel(802571459712516156)
-        embed = discord.Embed(title = "Change Log", color = discord.Color.green())
-        embed.add_field(name = "Date:", value = date)
-        embed.add_field(name = "Changes:", value = message)
-        embed.set_thumbnail(url="https://media2.giphy.com/media/2ceckIBeAIKqw7awPO/giphy.gif")
+    async def changelog(self, ctx, *, change):
+        channel = ctx.guild.get_channel(802571459712516156)
+        d = datetime.date.today().strftime("%b %d")
+        embed = discord.Embed(title = "Change Log")
+        embed.add_field(name = "Date:", value = f'{d}')
+        embed.add_field(name = "<:down1:823376679128268850> Changes:", value = f"{change}\n<:down1:823376679128268850> No changes to having a great day :D")
         await channel.send(embed=embed)
         await ctx.send('Created New Changelog')
 
@@ -32,9 +31,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def testwelcome(self, ctx):
         member = ctx.author
-        guild = self.client.get_guild(802565984602423367)
-        role = guild.get_channel(802581706816487474)
-        lobby = guild.get_channel(802565985055014956)
+        role = ctx.guild.get_channel(802581706816487474)
+        lobby = ctx.guild.get_channel(802565985055014956)
         embed = discord.Embed(title = "Yawn... Oh! Welcome :D", description = f"Welcome to Around the Clock {member.mention}!\nFirst Verify in {role.mention} :D\nThen Grab Some Roles, or hangout in {lobby.mention}", color = discord.Color.dark_teal())
         embed.set_thumbnail(url=member.avatar_url)
         embed.set_image(url="https://64.media.tumblr.com/752e98a41362e1c7e51c7a50a78c179c/f56cd24a7cd794d6-54/s2048x3072_c0,0,100000,85880/782343118d50eddb426ac93204cac586f38469cd.gif")
@@ -53,6 +51,15 @@ class Admin(commands.Cog):
     async def testbump(self, ctx):
         embed = discord.Embed(title = "Disboard is off cooldown!", description  = "Time to bump! 🍌", color = discord.Color.dark_blue())
         embed.set_thumbnail(url="https://i.pinimg.com/originals/ee/b0/e6/eeb0e632af64b76830c5777e07770202.png")
+        await ctx.send(embed=embed)
+
+    @commands.command(aliases=['testcl'], help='Test Changlogs')
+    @commands.has_role("Admin")
+    async def testchangelog(self, ctx, *, change):
+        d = datetime.date.today().strftime("%b %d")
+        embed = discord.Embed(title = "Change Log")
+        embed.add_field(name = "Date:", value = f'{d}')
+        embed.add_field(name = "<:down1:823376679128268850> Changes:", value = f"{change}\n<:down1:823376679128268850> No changes to having a great day :D")
         await ctx.send(embed=embed)
 
 def setup(client):
