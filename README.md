@@ -35,3 +35,7 @@ Server Sessions stays in a Voice Channel and shows a Pomodoro timer indefinately
 ## 💬 Audit Log
 
 Custom Logging Bot because it looks better :D
+
+## 💡 Ideas
+
+- [ ] Account Age in Log Bot Joins
