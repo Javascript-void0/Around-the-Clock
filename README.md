@@ -39,3 +39,5 @@ Custom Logging Bot because it looks better :D
 ## 💡 Ideas
 
 - [x] Account Age in Log Bot Joins
+- [ ] Midnight and Log bot link
+- [ ] Midnight Auto Mod
