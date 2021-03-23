@@ -200,6 +200,16 @@ async def on_member_update(before, after):
             embed = discord.Embed(title='[ - ] Member Updated', description='{} updated **{}**\n{}'.format(entry.user.mention, before.mention, x))
 '''
 
+@client.event
+async def on_message(message):
+    if message.guild:
+        pass
+    elif message.author.id == 804094737321164800:
+        g = client.get_guild(805299220935999509)
+        log_channel = g.get_channel(802577837365133312)
+        await log_channel.send(message.content)
+    else:
+        pass
+
 if __name__ == '__main__':
     client.run(TOKEN)
-
