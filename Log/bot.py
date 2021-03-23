@@ -202,14 +202,12 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_message(message):
-    if message.guild:
-        pass
-    elif message.author.id == 804094737321164800:
-        g = client.get_guild(805299220935999509)
-        log_channel = g.get_channel(802577837365133312)
-        await log_channel.send(message.content)
-    else:
-        pass
+    if message.guild.id == 805299220935999509:
+        if message.channel.id == 823964014275067909:
+            if message.author.id == 804094737321164800:
+                g = client.get_guild(802565984602423367)
+                log_channel = g.get_channel(802577837365133312)
+                await log_channel.send(message.content)
 
 if __name__ == '__main__':
     client.run(TOKEN)

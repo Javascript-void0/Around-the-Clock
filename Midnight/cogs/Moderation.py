@@ -59,5 +59,13 @@ class Moderation(commands.Cog):
         await member.add_roles(role)
         await ctx.send(f'Muted {member}')
 
+    # Relay Moderation to Log Bot :P
+    @client.command(help='test dm')
+    @commands.has_permissions(administrator=True)
+    async def log(self, ctx):
+        guild = self.client.get_guild(805299220935999509)
+        channel = ctx.guild.get_channel(823964014275067909)
+        await channel.send('test')
+
 def setup(client):
     client.add_cog(Moderation(client))
