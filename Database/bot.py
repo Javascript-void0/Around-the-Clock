@@ -57,6 +57,7 @@ async def on_voice_state_update(member, before, after):
             data, msg = await getData(member)
             await timerStart(member)
         else:
+            embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: 0 Hours')
             await db.send(f'{member.mention}: 0')
             await timerStart(member)
     elif after.channel is None:
@@ -64,9 +65,66 @@ async def on_voice_state_update(member, before, after):
         data, msg = await getData(member)
         count[member.id] = False
         addTime = int(data[1]) + time[member.id]
-        await msg.edit(content=f'{member.mention}: {addTime}')
+        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {addTime} Hours')
+        await msg.edit(content=f'{member.mention}: {addTime}', embed=embed)
 
+@client.command(help='Add score to user')
+@commands.has_permissions(administrator=True)
+async def add(ctx, member : discord.Member, amount : int):
+    if await registered(member):
+        data, msg = await getData(member)
+        newTime = amount + int(data[1])
+        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {newTime} Hours')
+        await msg.edit(content=f'{data[0]}: {newTime}', embed=embed)
+        await ctx.send(f'Added {amount} hours to {member.mention}')
+    else:
+        await ctx.send(f'{member} has no data')
 
+@client.command(aliases=['subtract'], help='Remove score from user')
+@commands.has_permissions(administrator=True)
+async def remove(ctx, member : discord.Member, amount : int):
+    if await registered(member):
+        data, msg = await getData(member)
+        newTime = int(data[1]) - amount
+        if newTime < 0:
+            newTime = 0
+        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {newTime} Hours')
+        await msg.edit(content=f'{data[0]}: {newTime}', embed=embed)
+        await ctx.send(f'Removed {amount} hours from {member.mention}')
+    else:
+        await ctx.send(f'{member} has no data')
 
+@client.command(help='Set score for user')
+@commands.has_permissions(administrator=True)
+async def set(ctx, member : discord.Member, amount : int):
+    if await registered(member):
+        data, msg = await getData(member)
+        if amount < 0:
+            amount = 0
+        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {amount} Hours')
+        await msg.edit(content=f'{data[0]}: {amount}', embed=embed)
+        await ctx.send(f'Set hours of {member.mention} to {amount}')
+    else:
+        await ctx.send(f'{member} has no data')
+
+@client.command(help='Find stats of a user')
+async def stats(ctx, member : discord.Member):
+    if await registered(member):
+        data, _ = await getData(member)
+        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {int(data[1])} Hours')
+        await ctx.send(embed=embed)
+    else:
+        await ctx.send(f'{member} has not data')
+
+@client.command(help='Registers a user')
+@commands.has_permissions(administrator=True)
+async def register(ctx, member : discord.Member):
+    global db
+    if await registered(member):
+        await ctx.send(f'{member.mention} is already registered')
+    else:
+        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: 0 Hours')
+        await db.send(f'{member.mention}: 0', embed=embed)
+        await ctx.send(f'Registered {member.mention}')
 if __name__ == '__main__':
     client.run(TOKEN)

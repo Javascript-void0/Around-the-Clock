@@ -16,7 +16,7 @@ General moderation/tasks/events used throughout the server.
 
 ##### Study - `12 start` `12 stop` `12 break` `12 time` `12 lofi`
 
-##### Misc - `12 ping` `12 8ball` `12 help` `12 load` `12 unload`
+##### Misc - `12 ping` `12 8ball` `12 help` `12 load` `12 unload` `12 bots` `12 server` `12 invite` `12 highlow`
 
 ##### Moderation - `12 clear` `12 whois` `12 kick` `12 ban` `12 unban` `12 mute`
 
@@ -35,6 +35,10 @@ Server Sessions stays in a Voice Channel and shows a Pomodoro timer indefinately
 ## 💬 Audit Log
 
 Custom Logging Bot because it looks better :D
+
+## 💾 "Database"
+
+Keeps track of stuff...
 
 ## 💡 Ideas
 
