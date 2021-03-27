@@ -2,3 +2,4 @@
 midnight: python Midnight/bot.py
 sessions: python Server-Sessions/bot.py
 log: python Log/bot.py
+db: python Database/bot.py

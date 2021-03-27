@@ -11,7 +11,7 @@ TOKEN = os.getenv("SS_TOKEN")
 @client.event
 async def on_ready():
     print('Started {0.user}'.format(client))
-    await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
+    await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name="#▹fireplace_study"))
 
 @tasks.loop(seconds=1.0)
 async def timer_start():
