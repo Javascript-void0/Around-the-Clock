@@ -42,7 +42,7 @@ async def registered(member):
 @client.event
 async def on_ready():
     global db, guild
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="the Database"))
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="#▹💾▹database"))
     guild = client.get_guild(805299220935999509)
     db = guild.get_channel(825053228956647464)
     print('[ + ] Started {0.user}'.format(client))

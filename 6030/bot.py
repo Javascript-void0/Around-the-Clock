@@ -12,7 +12,7 @@ TOKEN = os.getenv("6030_TOKEN")
 @client.event
 async def on_ready():
     print('Started {0.user}'.format(client))
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="#⏳▹pomodoro"))
 
 @client.command(aliases=['pomo', 'pomodoro'], help='Starts the Timer')
 async def start(ctx):
