@@ -17,8 +17,8 @@ async def timerStart(member):
     time[member.id] = 0
     count[member.id] = True
     while count[member.id] == True:
-        await asyncio.sleep(1)
-        time[member.id] += 1
+        await asyncio.sleep(360)
+        time[member.id] += 0.1
 
 async def getData(member):
     global db
@@ -64,7 +64,7 @@ async def on_voice_state_update(member, before, after):
         print(f'{member} left #{before.channel.name}')
         data, msg = await getData(member)
         count[member.id] = False
-        addTime = int(data[1]) + time[member.id]
+        addTime = int(float(data[1])) + time[member.id]
         embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {addTime} Hours\n**Tasks**: 5')
         await msg.edit(content=f'{member.mention}: {addTime}', embed=embed)
 
@@ -73,7 +73,7 @@ async def on_voice_state_update(member, before, after):
 async def add(ctx, member : discord.Member, amount : int):
     if await registered(member):
         data, msg = await getData(member)
-        newTime = amount + int(data[1])
+        newTime = amount + int(float(data[1]))
         embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {newTime} Hours\n**Tasks**: 5')
         await msg.edit(content=f'{data[0]}: {newTime}', embed=embed)
         await ctx.send(f'Added {amount} hours to {member.mention}')
@@ -85,7 +85,7 @@ async def add(ctx, member : discord.Member, amount : int):
 async def remove(ctx, member : discord.Member, amount : int):
     if await registered(member):
         data, msg = await getData(member)
-        newTime = int(data[1]) - amount
+        newTime = int(float(data[1])) - amount
         if newTime < 0:
             newTime = 0
         embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {newTime} Hours\n**Tasks**: 5')
@@ -96,7 +96,7 @@ async def remove(ctx, member : discord.Member, amount : int):
 
 @client.command(help='Set score for user')
 @commands.has_permissions(administrator=True)
-async def set(ctx, member : discord.Member, amount : int):
+async def set(ctx, member : discord.Member, amount : float):
     if await registered(member):
         data, msg = await getData(member)
         if amount < 0:
@@ -126,5 +126,6 @@ async def register(ctx, member : discord.Member):
         embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: 0 Hours\n**Tasks**: 5')
         await db.send(f'{member.mention}: 0', embed=embed)
         await ctx.send(f'Registered {member.mention}')
+
 if __name__ == '__main__':
     client.run(TOKEN)
