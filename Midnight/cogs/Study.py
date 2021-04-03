@@ -115,7 +115,7 @@ class Study(commands.Cog):
 # SESSIONS FORMAT
 
     @commands.command(help='General Study Session Format')
-    async def testsession(self, ctx, *, message=None):
+    async def session(self, ctx, *, message=None):
         mention = discord.utils.get(ctx.guild.roles, name='Study Session')
         if message is None:
             message = 'New Session Started'

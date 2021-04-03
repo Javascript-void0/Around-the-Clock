@@ -77,7 +77,7 @@ class Admin(commands.Cog):
 
     @commands.command(help='Test sessions format')
     @commands.has_role("Admin")
-    async def hours(self, ctx, link, *, message=None):
+    async def testhours(self, ctx, link, *, message=None):
         mention = discord.utils.get(ctx.guild.roles, name='Study Session')
         if message is None:
             message = 'New Session Started'
@@ -95,7 +95,7 @@ class Admin(commands.Cog):
 
     @commands.command(help='Ends Sessions')
     @commands.has_role("Admin")
-    async def end(self, ctx, msgid : int = None):
+    async def testend(self, ctx, msgid : int = None):
         mention = discord.utils.get(ctx.guild.roles, name='Study Session')
         if msgid is None:
             await ctx.send('`12 end <message id>`')
