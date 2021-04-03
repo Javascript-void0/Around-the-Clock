@@ -12,9 +12,9 @@
 
 General moderation/tasks/events used throughout the server.  
 
-##### Admin - `12 changelog` `testwelcome` `testjoin` `testbump`
+##### Admin - `12 changelog`
 
-##### Study - `12 start` `12 stop` `12 break` `12 time` `12 lofi`
+##### Study - `12 start` `12 stop` `12 break` `12 time` `12 lofi` `12 session` `12 hours` `12 end`
 
 ##### Misc - `12 ping` `12 8ball` `12 help` `12 load` `12 unload` `12 bots` `12 server` `12 invite` `12 highlow`
 
@@ -46,6 +46,6 @@ Keeps track of stuff...
 - [ ] Midnight and Log bot link
 - [ ] Midnight Auto Mod
 - [ ] Bot Stats
-- [ ] Hours session format, or session in general
-- [ ] Slow Timer Again
+- [x] Hours session format, or session in general
+- [x] Slow Timer Again
 - [ ] Times
