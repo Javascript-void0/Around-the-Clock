@@ -48,3 +48,4 @@ Keeps track of stuff...
 - [ ] Bot Stats
 - [ ] Hours session format, or session in general
 - [ ] Slow Timer Again
+- [ ] Times

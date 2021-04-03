@@ -64,20 +64,46 @@ class Admin(commands.Cog):
 
     @commands.command(help='Test sessions format')
     @commands.has_role("Admin")
-    async def testsession(self, ctx, link, *, message):
+    async def testsession(self, ctx, *, message=None):
         mention = discord.utils.get(ctx.guild.roles, name='Study Session')
+        if message is None:
+            message = 'New Session Started'
         embed = discord.Embed(title = f"⏰ Session Started", description = f"Started by {ctx.author.mention}")
-        embed.add_field(name = f"{message}", value = f"{link}")
-        message = await ctx.send(f'{mention.mention}', embed=embed)
-        await message.add_reaction("❌")
+        embed.add_field(name = f"{message}", value = f"`Good Luck ♥`")
+        message = await ctx.send(f'{mention.mention} `✔ Session Started', embed=embed)
+        embed.set_footer(text=f"End this session with: 12 end {message.id}")
+        await message.edit(content=f'{mention.mention} `✔ Session Started`', embed=embed)
         await ctx.message.delete()
 
-'''
-    @commands.Cog.listener
-    async def on_reaction_add(message, user):
-        if message.author.id == '804094737321164800':
-            if reaction
-'''
+    @commands.command(help='Test sessions format')
+    @commands.has_role("Admin")
+    async def hours(self, ctx, link, *, message=None):
+        mention = discord.utils.get(ctx.guild.roles, name='Study Session')
+        if message is None:
+            message = 'New Session Started'
+        if "https://hours.zone/invite/" in link:
+            embed = discord.Embed(title = f"⏰ Study Session", description = f"Started by {ctx.author.mention}")
+            embed.add_field(name = f"{message}", value = f"{link}")
+            embed.set_thumbnail(url='https://i.imgur.com/JViNlaE.png')
+            message = await ctx.send(f'{mention.mention} `✔ Session Started`', embed=embed)
+            embed.set_footer(text=f"End this session with: 12 end {message.id}")
+            await message.edit(content=f'{mention.mention} `✔ Session Started`', embed=embed)
+            await ctx.message.delete()
+        else:
+            await ctx.message.delete()
+            await ctx.send('Hours Invite Link')
+
+    @commands.command(help='Ends Sessions')
+    @commands.has_role("Admin")
+    async def end(self, ctx, msgid : int = None):
+        mention = discord.utils.get(ctx.guild.roles, name='Study Session')
+        if msgid is None:
+            await ctx.send('`12 end <message id>`')
+        elif ctx.channel.id == 802915711122014278:
+            message = await ctx.fetch_message(msgid)
+            embed = message.embeds[0]
+            await message.edit(content=f'{mention.mention} `❌ Session Ended`', embed=embed)
+        await ctx.message.delete()
 
 def setup(client):
     client.add_cog(Admin(client))
