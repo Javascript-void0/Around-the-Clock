@@ -112,5 +112,47 @@ class Study(commands.Cog):
         voice = await channel.connect()
         voice.play(discord.FFmpegPCMAudio(source="assets/lofi.mp3"))
 
+# SESSIONS FORMAT
+
+    @commands.command(help='General Study Session Format')
+    async def testsession(self, ctx, *, message=None):
+        mention = discord.utils.get(ctx.guild.roles, name='Study Session')
+        if message is None:
+            message = 'New Session Started'
+        embed = discord.Embed(title = f"⏰ Session Started", description = f"Started by {ctx.author.mention}")
+        embed.add_field(name = f"{message}", value = f"`Good Luck ♥`")
+        message = await ctx.send(f'{mention.mention} `✔ Session Started', embed=embed)
+        embed.set_footer(text=f"End this session with: 12 end {message.id}")
+        await message.edit(content=f'{mention.mention} `✔ Session Started`', embed=embed)
+        await ctx.message.delete()
+
+    @commands.command(help='Hours.zone Session Format')
+    async def hours(self, ctx, link, *, message=None):
+        mention = discord.utils.get(ctx.guild.roles, name='Study Session')
+        if message is None:
+            message = 'New Session Started'
+        if "https://hours.zone/invite/" in link:
+            embed = discord.Embed(title = f"⏰ Study Session", description = f"Started by {ctx.author.mention}")
+            embed.add_field(name = f"{message}", value = f"{link}")
+            embed.set_thumbnail(url='https://i.imgur.com/JViNlaE.png')
+            message = await ctx.send(f'{mention.mention} `✔ Session Started`', embed=embed)
+            embed.set_footer(text=f"End this session with: 12 end {message.id}")
+            await message.edit(content=f'{mention.mention} `✔ Session Started`', embed=embed)
+            await ctx.message.delete()
+        else:
+            await ctx.message.delete()
+            await ctx.send('Hours Invite Link')
+
+    @commands.command(help='Ends Sessions')
+    async def end(self, ctx, msgid : int = None):
+        mention = discord.utils.get(ctx.guild.roles, name='Study Session')
+        if msgid is None:
+            await ctx.send('`12 end <message id>`')
+        elif ctx.channel.id == 802915711122014278:
+            message = await ctx.fetch_message(msgid)
+            embed = message.embeds[0]
+            await message.edit(content=f'{mention.mention} `❌ Session Ended`', embed=embed)
+        await ctx.message.delete()
+
 def setup(client):
     client.add_cog(Study(client))
