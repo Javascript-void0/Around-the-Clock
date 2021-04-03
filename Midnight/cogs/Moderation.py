@@ -67,5 +67,10 @@ class Moderation(commands.Cog):
         channel = ctx.guild.get_channel(823964014275067909)
         await channel.send('test')
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if "discord.gg/" in message.content:
+            await message.delete()
+
 def setup(client):
     client.add_cog(Moderation(client))

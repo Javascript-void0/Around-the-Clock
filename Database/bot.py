@@ -58,7 +58,7 @@ async def on_voice_state_update(member, before, after):
             await timerStart(member)
         else:
             embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: 0 Hours\n**Tasks**: 5')
-            await db.send(f'{member.mention}: 0')
+            await db.send(f'{member.mention}: 0', embed=embed)
             await timerStart(member)
     elif after.channel is None:
         print(f'{member} left #{before.channel.name}')

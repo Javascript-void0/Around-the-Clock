@@ -46,3 +46,5 @@ Keeps track of stuff...
 - [ ] Midnight and Log bot link
 - [ ] Midnight Auto Mod
 - [ ] Bot Stats
+- [ ] Hours session format, or session in general
+- [ ] Slow Timer Again

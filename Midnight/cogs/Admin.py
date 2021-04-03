@@ -62,5 +62,22 @@ class Admin(commands.Cog):
         embed.add_field(name = "<:down1:823376679128268850> Changes:", value = f"{change}\n<:down1:823376679128268850> No changes to having a great day :D")
         await ctx.send(embed=embed)
 
+    @commands.command(help='Test sessions format')
+    @commands.has_role("Admin")
+    async def testsession(self, ctx, link, *, message):
+        mention = discord.utils.get(ctx.guild.roles, name='Study Session')
+        embed = discord.Embed(title = f"⏰ Session Started", description = f"Started by {ctx.author.mention}")
+        embed.add_field(name = f"{message}", value = f"{link}")
+        message = await ctx.send(f'{mention.mention}', embed=embed)
+        await message.add_reaction("❌")
+        await ctx.message.delete()
+
+'''
+    @commands.Cog.listener
+    async def on_reaction_add(message, user):
+        if message.author.id == '804094737321164800':
+            if reaction
+'''
+
 def setup(client):
     client.add_cog(Admin(client))
