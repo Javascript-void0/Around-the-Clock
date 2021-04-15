@@ -2,6 +2,7 @@ import discord
 import random
 import asyncio
 from random import randint
+from time import sleep
 from discord.ext import commands
 
 class Misc(commands.Cog):
@@ -123,6 +124,60 @@ class Misc(commands.Cog):
                 await ctx.send(f'{ctx.author.mention} Hey your options to respond are "high", "low", and "jackpot". Run the command again with more brain cells next time. (Number was {num} btw)')
         except asyncio.TimeoutError:
             await ctx.send('Imagine not answering')
-            
+
+    @commands.command(aliases=['ani'], help='Loading Bar...?')
+    async def animation(self, ctx):
+        bar = await ctx.send("```[:::::::::::::::::::::::::] 0.0%```")
+        sleep(1)
+        await bar.edit(content="```[>::::::::::::::::::::::::] 4.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>:::::::::::::::::::::::] 8.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>::::::::::::::::::::::] 12.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>:::::::::::::::::::::] 16.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>::::::::::::::::::::] 20.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>:::::::::::::::::::] 24.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>::::::::::::::::::] 28.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>:::::::::::::::::] 32.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>::::::::::::::::] 36.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>:::::::::::::::] 40.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>::::::::::::::] 44.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>:::::::::::::] 48.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>::::::::::::] 52.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>:::::::::::] 56.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>::::::::::] 60.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>:::::::::] 64.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>>::::::::] 68.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>>>:::::::] 72.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>>>>::::::] 76.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>>>>>:::::] 80.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>>>>>>::::] 84.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>>>>>>>:::] 88.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>>>>>>>>::] 92.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>>>>>>>>>:] 96.0%```")
+        sleep(1)
+        await bar.edit(content="```[>>>>>>>>>>>>>>>>>>>>>>>>>] 100.0%```")
+
 def setup(client):
     client.add_cog(Misc(client))
