@@ -76,10 +76,10 @@ async def on_voice_state_update(member, before, after):
         timing[member.id] = False
         await ACT_CNL.send(f'```{member} left #{before.channel.name}```')
         stat = getData(member)
-        stat_num = findall(r'\d', stat.name)
-        total = int(stat_num[0]) + elapsed_time[member.id]
+        stat_num = int(''.join(filter(str.isdigit, stat.name)))
+        total = stat_num + elapsed_time[member.id]
         await stat.edit(name=f'{total} Minutes')
-        await ACT_CNL.send(f'```{member} stats updated: {int(stat_num[0])} >> {total}```')
+        await ACT_CNL.send(f'```{member} stats updated: TEST {stat_num} >> {total}```')
         
 if __name__ == '__main__':
     client.run(TOKEN)
