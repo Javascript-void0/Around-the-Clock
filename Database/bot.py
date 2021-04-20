@@ -7,7 +7,7 @@ from discord.utils import get
 
 client = commands.Bot(command_prefix='.')
 client.remove_command('help')
-TOKEN = os.getenv("DB_TOKEN")
+TOKEN = os.getenv("TOKEN")
 
 ACT_CNL = None
 DB_GUILD = None
