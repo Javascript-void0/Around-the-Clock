@@ -42,7 +42,7 @@ def guildCheck(event):
 @client.event
 async def on_ready():
     print('[ + ] Started {0.user}'.format(client))
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="the Audit Log"))
+#    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="the Audit Log"))
 
 @client.event
 async def on_member_join(member):

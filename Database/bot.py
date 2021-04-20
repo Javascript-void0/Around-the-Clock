@@ -54,7 +54,7 @@ async def reset_all_data_in_database(ctx):
 @client.event
 async def on_ready():
     global DB_GUILD, ACT_CNL
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
+#    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
     DB_GUILD = client.get_guild(833853909168160777)
     ACT_CNL = DB_GUILD.get_channel(833893975538401280)
     print('[ + ] Started {0.user}'.format(client))
