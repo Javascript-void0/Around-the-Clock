@@ -6,7 +6,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.presences = True
 client = commands.Bot(command_prefix='12 ', intents=intents)
-TOKEN = os.getenv("MID_TOKEN")
+TOKEN = os.getenv("TOKEN")
 
 @client.command(help='Load Cogs')
 @commands.has_permissions(administrator=True)

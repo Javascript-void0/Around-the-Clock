@@ -7,7 +7,7 @@ from discord.utils import get
 client = commands.Bot(command_prefix='63 ')
 run = False
 show = False
-TOKEN = os.getenv("6030_TOKEN")
+TOKEN = os.getenv("TOKEN")
 
 @client.event
 async def on_ready():

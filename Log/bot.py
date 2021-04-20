@@ -9,7 +9,7 @@ intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(command_prefix='.', intents=intents)
 client.remove_command('help')
-TOKEN = os.getenv("AUDIT_TOKEN")
+TOKEN = os.getenv("TOKEN")
 
 def get_dt():
     t = time.localtime()
