@@ -1,6 +1,7 @@
 import discord
 import os
-import asyncio
+from asyncio import sleep
+from re import findall
 from discord.ext import commands
 from discord.utils import get
 
@@ -8,124 +9,77 @@ client = commands.Bot(command_prefix='.')
 client.remove_command('help')
 TOKEN = os.getenv("DB_TOKEN")
 
-guild = None
-db = None
-count = {}
-time = {}
+ACT_CNL = None
+DB_GUILD = None
+timing = {}
+elapsed_time = {}
 
 async def timerStart(member):
-    time[member.id] = 0
-    count[member.id] = True
-    while count[member.id] == True:
-        await asyncio.sleep(360)
-        time[member.id] += 0.1
+    elapsed_time[member.id] = 0
+    timing[member.id] = True
+    while timing[member.id]:
+        await sleep(1)
+        elapsed_time[member.id] += 1
 
-async def getData(member):
-    global db
-    id = member.id
-    messages = await db.history(limit=None).flatten()
-    for msg in messages:
-        m = msg.content.split(": ")
-        if str(id) in m[0]:
-            return m, msg
+def getData(member):
+    global DB_GUILD
+    for channel in DB_GUILD.channels:
+        if str(member.id) in channel.name:
+            stat = channel.channels[1]
+            return stat
 
-async def registered(member):
-    global db
-    id = member.id
-    messages = await db.history(limit=None).flatten()
-    for msg in messages:
-        m = msg.content.split(": ")
-        if str(id) in m[0]:
+def registered(member):
+    global DB_GUILD
+    for channel in DB_GUILD.channels:
+        if str(member.id) in channel.name:
             return True
     return False
 
+@client.command()
+@commands.is_owner()
+async def reset_all_data_in_database(ctx):
+    global DB_GUILD
+    for channel in DB_GUILD.channels:
+        if channel.name == '⎯⎯⎯⎯⎯⎯⎯⎯ important ⎯⎯⎯⎯⎯⎯⎯⎯⎯':
+            pass
+        elif channel.name == 'info':
+            pass
+        elif channel.name == 'vc':
+            pass
+        elif channel.name == 'testing':
+            pass
+        else:
+            await channel.delete()
+
 @client.event
 async def on_ready():
-    global db, guild
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="#▹💾▹database"))
-    guild = client.get_guild(805299220935999509)
-    db = guild.get_channel(825053228956647464)
+    global DB_GUILD, ACT_CNL
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Around the Clock"))
+    DB_GUILD = client.get_guild(833853909168160777)
+    ACT_CNL = DB_GUILD.get_channel(833893975538401280)
     print('[ + ] Started {0.user}'.format(client))
-    print(f'[ + ] #{db} Connected to database... :P')
+    print('[ + ] Connected to database...')
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    global db
+    global DB_GUILD, ACT_CNL
     if before.channel is None:
-        print(f'{member} joined #{after.channel.name}')
-        if await registered(member):
-            data, msg = await getData(member)
+        await ACT_CNL.send(f'```{member} joined #{after.channel.name}```')
+        if registered(member):
             await timerStart(member)
         else:
-            embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: 0 Hours\n**Tasks**: 5')
-            await db.send(f'{member.mention}: 0', embed=embed)
+            category = await DB_GUILD.create_category_channel(member.id)
+            await DB_GUILD.create_voice_channel(member.name + '#' + member.discriminator, category=category)
+            await DB_GUILD.create_voice_channel('0 Minutes', category=category)
             await timerStart(member)
     elif after.channel is None:
-        print(f'{member} left #{before.channel.name}')
-        data, msg = await getData(member)
-        count[member.id] = False
-        addTime = int(float(data[1])) + time[member.id]
-        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {addTime} Hours\n**Tasks**: 5')
-        await msg.edit(content=f'{member.mention}: {addTime}', embed=embed)
-
-@client.command(help='Add score to user')
-@commands.has_permissions(administrator=True)
-async def add(ctx, member : discord.Member, amount : int):
-    if await registered(member):
-        data, msg = await getData(member)
-        newTime = amount + int(float(data[1]))
-        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {newTime} Hours\n**Tasks**: 5')
-        await msg.edit(content=f'{data[0]}: {newTime}', embed=embed)
-        await ctx.send(f'Added {amount} hours to {member.mention}')
-    else:
-        await ctx.send(f'{member} has no data')
-
-@client.command(aliases=['subtract'], help='Remove score from user')
-@commands.has_permissions(administrator=True)
-async def remove(ctx, member : discord.Member, amount : int):
-    if await registered(member):
-        data, msg = await getData(member)
-        newTime = int(float(data[1])) - amount
-        if newTime < 0:
-            newTime = 0
-        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {newTime} Hours\n**Tasks**: 5')
-        await msg.edit(content=f'{data[0]}: {newTime}', embed=embed)
-        await ctx.send(f'Removed {amount} hours from {member.mention}')
-    else:
-        await ctx.send(f'{member} has no data')
-
-@client.command(help='Set score for user')
-@commands.has_permissions(administrator=True)
-async def set(ctx, member : discord.Member, amount : float):
-    if await registered(member):
-        data, msg = await getData(member)
-        if amount < 0:
-            amount = 0
-        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {amount} Hours\n**Tasks**: 5')
-        await msg.edit(content=f'{data[0]}: {amount}', embed=embed)
-        await ctx.send(f'Set hours of {member.mention} to {amount}')
-    else:
-        await ctx.send(f'{member} has no data')
-
-@client.command(help='Find stats of a user')
-async def stats(ctx, member : discord.Member):
-    if await registered(member):
-        data, _ = await getData(member)
-        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: {int(data[1])} Hours\n**Tasks**: 5')
-        await ctx.send(embed=embed)
-    else:
-        await ctx.send(f'{member} has not data')
-
-@client.command(help='Registers a user')
-@commands.has_permissions(administrator=True)
-async def register(ctx, member : discord.Member):
-    global db
-    if await registered(member):
-        await ctx.send(f'{member.mention} is already registered')
-    else:
-        embed = discord.Embed(title=f"{member.name}'s Stats", description=f'\n\n**Stats**: 0 Hours\n**Tasks**: 5')
-        await db.send(f'{member.mention}: 0', embed=embed)
-        await ctx.send(f'Registered {member.mention}')
-
+        timing[member.id] = False
+        await ACT_CNL.send(f'```{member} left #{before.channel.name}```')
+        stat = getData(member)
+        stat_num = findall(r'\d', stat.name)
+        total = int(stat_num[0]) + elapsed_time[member.id]
+        await stat.edit(name=f'{total} Minutes')
+        await ACT_CNL.send(f'```{member} stats updated: {int(stat_num[0])} >> {total}```')
+        
 if __name__ == '__main__':
     client.run(TOKEN)
