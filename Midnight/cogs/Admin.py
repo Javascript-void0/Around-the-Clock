@@ -105,5 +105,17 @@ class Admin(commands.Cog):
             await message.edit(content=f'{mention.mention} `❌ Session Ended`', embed=embed)
         await ctx.message.delete()
 
+    @commands.command(aliases=['traveler_update', 'mu', 'tu'], help='update member count')
+    @commands.has_role("Admin")
+    async def member_update(self, ctx):
+        guild = self.client.get_guild(802565984602423367)
+        members = guild.get_channel(802737096640036924)
+        count = 0
+        for member in guild.members:
+            if not member.bot:
+                count += 1
+        await members.edit(name=f'➥ {count} Travelers')
+        await ctx.send('Traveler count updated')
+
 def setup(client):
     client.add_cog(Admin(client))

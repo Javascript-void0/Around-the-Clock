@@ -50,7 +50,7 @@ async def on_message(message):
 
 @client.command(help='Set score for user')
 @commands.has_permissions(administrator=True)
-async def set(ctx, member : discord.Member, amount : float):
+async def set(ctx, member : discord.Member, amount : int):
     if member.bot:
         return
     if await registered(member):
