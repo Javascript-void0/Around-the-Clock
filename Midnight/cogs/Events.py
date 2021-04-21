@@ -36,6 +36,13 @@ class Events(commands.Cog):
     async def on_member_remove(self, member):
         print(f'{member} has left the server.')
 
+        members = guild.get_channel(802737096640036924)
+        count = 0
+        for member in guild.members:
+            if not member.bot:
+                count += 1
+        await members.edit(name=f'➥ {count} Travelers')
+
     @commands.Cog.listener()
     async def on_ready(self):
         print('Started {0.user}'.format(self.client))
