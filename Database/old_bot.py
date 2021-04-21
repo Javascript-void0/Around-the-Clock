@@ -5,7 +5,6 @@ from discord.ext import commands
 from discord.utils import get
 
 client = commands.Bot(command_prefix='.')
-client.remove_command('help')
 TOKEN = os.getenv("DB_TOKEN")
 
 guild = None
