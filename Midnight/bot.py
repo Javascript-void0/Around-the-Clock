@@ -5,7 +5,7 @@ from discord.ext import commands
 intents = discord.Intents.default()
 intents.members = True
 intents.presences = True
-client = commands.Bot(command_prefix='::', intents=intents)
+client = commands.Bot(command_prefix='.', intents=intents)
 TOKEN = os.getenv("TOKEN")
 
 @client.command(help='Load Cogs')
