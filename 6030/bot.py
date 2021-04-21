@@ -4,7 +4,7 @@ import asyncio
 from discord.ext import tasks, commands
 from discord.utils import get
 
-client = commands.Bot(command_prefix=': ')
+client = commands.Bot(command_prefix='::')
 run = False
 show = False
 TOKEN = os.getenv("TOKEN")

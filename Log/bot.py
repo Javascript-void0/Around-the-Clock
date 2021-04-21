@@ -7,7 +7,7 @@ from discord.utils import get
 
 intents = discord.Intents.default()
 intents.members = True
-client = commands.Bot(command_prefix=': ', intents=intents)
+client = commands.Bot(command_prefix='::', intents=intents)
 client.remove_command('help')
 TOKEN = os.getenv("TOKEN")
 

@@ -9,7 +9,7 @@ def is_between(time, time_range):
         return time >= time_range[0] or time <= time_range[1]
     return time_range[0] <= time <= time_range[1]
 
-client = commands.Bot(command_prefix='12 ')
+client = commands.Bot(command_prefix='::')
 
 class Admin(commands.Cog):
 
