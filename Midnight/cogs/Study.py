@@ -86,24 +86,27 @@ class Study(commands.Cog):
     @commands.command(aliases=['leave', 'dc', 'disconnect'], help='Stops Pomodoro timer')
     async def stop(self, ctx):
         global pomodoro_timer 
-        pomodoro_timer = False
-        await ctx.send("Pomodoro stopped!")
-        voice = get(self.client.voice_clients, guild=ctx.guild)
-        voice = await voice.disconnect()
+        if pomodoro_timer:
+            pomodoro_timer = False
+            await ctx.send("Pomodoro stopped!")
+            voice = get(self.client.voice_clients, guild=ctx.guild)
+            voice = await voice.disconnect()
 
     @commands.command(name='break', help='Starts break timer')
     async def _break(self, ctx):
         global specialBreakTime 
-        specialBreakTime = True
-        await ctx.send("Starting Break Time now!")
-        voice = get(self.client.voice_clients, guild=ctx.guild)
-        voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
+        if pomodoro_timer:
+            specialBreakTime = True
+            await ctx.send("Starting Break Time now!")
+            voice = get(self.client.voice_clients, guild=ctx.guild)
+            voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
 
     @commands.command(help='Displays time remaining') 
     async def time(self, ctx):
         global showTimer
-        showTimer = True
-        await ctx.send("Time remaining:")
+        if pomodoro_timer:
+            showTimer = True
+            await ctx.send("Time remaining:")
 
     @commands.command(help='Lofi in Voice Channels')
     async def lofi(self, ctx):

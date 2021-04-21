@@ -4,7 +4,7 @@ import asyncio
 from discord.ext import tasks, commands
 from discord.utils import get
 
-client = commands.Bot(command_prefix='63 ')
+client = commands.Bot(command_prefix=': ')
 run = False
 show = False
 TOKEN = os.getenv("TOKEN")
@@ -15,9 +15,12 @@ async def on_ready():
 #    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="#⏳▹pomodoro"))
 
 @client.command(aliases=['pomo', 'pomodoro'], help='Starts the Timer')
-async def start(ctx):
+async def start(ctx, x=None):
     global run, show
 
+    if x != '63':
+        return
+    
     channel = ctx.author.voice.channel
     voice = get(client.voice_clients, guild=ctx.guild)    
     if ctx.author.voice.channel:
@@ -65,8 +68,6 @@ async def stop(ctx):
         await ctx.send('Timer Stopped')
         voice = get(client.voice_clients, guild=ctx.guild)
         voice = await voice.disconnect()
-    else:
-        await ctx.send('No Timer Running')
 
 @client.command(aliases=['join'], help='Use if Bot disconnects, idk')
 async def rejoin(ctx):
@@ -89,8 +90,6 @@ async def time(ctx):
     if run == True:
         show = True
         await ctx.send("Time remaining:")
-    else:
-        await ctx.send('No Timer Running')
 
 if __name__ == '__main__':
     client.run(TOKEN)
