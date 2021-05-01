@@ -154,7 +154,7 @@ async def set(ctx, member : discord.Member, num : int):
         await ctx.send(f'```DATABASE: Integer must be positive```')
 
 @client.command(aliases=['data', 'search'], help='Find Data')
-async def find(ctx, member : discord.Member, num : int):
+async def find(ctx, member : discord.Member):
     global db
     await db_files()
     data = await find_dir_files(member)
