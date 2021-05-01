@@ -1,6 +1,6 @@
 import discord
 import os
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.utils import get
 
 client = commands.Bot(command_prefix='.')
@@ -17,6 +17,7 @@ async def on_ready():
     print('[ + ] Started {0.user}'.format(client))
     print(f'[ + ] Connected to database...')
 
+# Check is member is registered
 async def exists(member):
     await db_files()
     data = await find_dir_files(member)
@@ -24,6 +25,7 @@ async def exists(member):
         return True
     return False
 
+# Adds New member
 async def new(member):
     global db
     await db_files()
@@ -42,17 +44,13 @@ async def new(member):
                     await reload_database()
                     break
 
-@client.command(help='Registers a Member')
-async def register(ctx, member : discord.Member):
-    await new(member)
-
+# Takes files from Database and saves to directory
 async def db_files():
     global db
     messages = await db.history(limit=None, oldest_first=True).flatten()
     if messages == []:
         await ctx.send('```No Files Found```')
     else:
-        # Update Files in Directory
         file_num = 1
         for msg in messages:
             file = await msg.attachments[0].read()
@@ -61,6 +59,7 @@ async def db_files():
                 f.close()
             file_num += 1
 
+# Searches and Returns Player's Data
 async def find_dir_files(member):
     data = None
     for file in os.listdir('./Database/data'):
@@ -74,22 +73,34 @@ async def find_dir_files(member):
     if not data:
         return False
 
-async def add_data(member, num):
+# Admin Manual Modify Player Data
+async def modify_data(member, action, num):
     data = None
     for file in os.listdir('./Database/data'):
         f = open(f'./Database/data/{file}')
         f = f.read()
-        lines = f.splitlines(True)
+        line = f.splitlines(True)
         for i in range(len(lines)):
             if str(member.id) in lines[i]:
                 data = lines[i][20:]
-                lines[i] = f'{member.id}: {int(data) + num}\n'
+                if action == 'add':
+                    x = int(data) + num
+                elif action == 'remove':
+                    x = int(data) - num
+                elif action == 'reset':
+                    x = 0
+                elif action == 'set':
+                    x = num
+                if x < 0:
+                    x = 0
+                lines[i] = f'{member.id}: {x}\n'
                 with open(f'./Database/data/{file}', 'w') as file:
                     file.writelines(lines)
                 break
     if not data:
         return False
 
+# Deletes and replaces with Directory Files
 async def reload_database():
     global db
     await db.purge(limit=None)
@@ -98,16 +109,52 @@ async def reload_database():
         for file in os.listdir('./Database/data'):
             await db.send(file=discord.File(f'./Database/data/{file}'))
 
+@client.command(help='Registers a Member')
+async def register(ctx, member : discord.Member):
+    await new(member)
+
 @client.command(help='Add')
 @commands.has_permissions(administrator=True)
 async def add(ctx, member : discord.Member, num : int):
-    await db_files()
-    await add_data(member, num)
-    await reload_database()
-    await ctx.send(f'```DATABASE: Added {num} to {member}```')
+    if num > 0:
+        await db_files()
+        await modify_data(member, 'add', num)
+        await reload_database()
+        await ctx.send(f'```DATABASE: Added {num} to {member}```')
+    else:
+        await ctx.send(f'```DATABASE: Integer must be positive```')
 
-@client.command(aliases=['data'], help='Find Data')
-async def find(ctx, member : discord.Member):
+@client.command(help='Remove')
+@commands.has_permissions(administrator=True)
+async def remove(ctx, member : discord.Member, num : int):
+    if num > 0:
+        await db_files()
+        await modify_data(member, 'remove', num)
+        await reload_database()
+        await ctx.send(f'```DATABASE: Removed {num} from {member}```')
+    else:
+        await ctx.send(f'```DATABASE: Integer must be positive```')
+@client.command(help='Reset Member Data')
+@commands.has_permissions(administrator=True)
+async def reset(ctx, member : discord.Member):
+    await db_files()
+    await modify_data(member, 'reset', 0)
+    await reload_database()
+    await ctx.send(f'```DATABASE: Reset {member} to 0```')
+
+@client.command(help='Set Member Data')
+@commands.has_permissions(administrator=True)
+async def set(ctx, member : discord.Member, num : int):
+    if num > 0:
+        await db_files()
+        await modify_data(member, 'set', num)
+        await reload_database()
+        await ctx.send(f'```DATABASE: Set {member} to {num}```')
+    else:
+        await ctx.send(f'```DATABASE: Integer must be positive```')
+
+@client.command(aliases=['data', 'search'], help='Find Data')
+async def find(ctx, member : discord.Member, num : int):
     global db
     await db_files()
     data = await find_dir_files(member)
@@ -116,14 +163,14 @@ async def find(ctx, member : discord.Member):
     else:
         await ctx.send(f'```DATABASE: No data for {member}```')
 
-@client.command(aliases=['dbclear'], help='Clears the Database')
+@client.command(aliases=['dbclear', 'cleardatabase', 'cleardb', 'clear_database', 'clear_db'], help='Clears the Database')
 @commands.has_permissions(administrator=True)
 async def databaseclear(ctx):
     global db
     await db.purge(limit=None)
     await ctx.send('```DATABASE: Cleared all files in #db```')
 
-@client.command(aliases=['dbload'], help='Database Load')
+@client.command(aliases=['dbload', 'loaddatabase', 'loaddb', 'load_database', 'load_db'], help='Database Load')
 @commands.has_permissions(administrator=True)
 async def databaseload(ctx):
     global db
