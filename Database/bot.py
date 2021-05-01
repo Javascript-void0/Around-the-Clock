@@ -17,6 +17,35 @@ async def on_ready():
     print('[ + ] Started {0.user}'.format(client))
     print(f'[ + ] Connected to database...')
 
+async def exists(member):
+    await db_files()
+    data = await find_dir_files(member)
+    if data:
+        return True
+    return False
+
+async def new(member):
+    global db
+    await db_files()
+    if not await exists(member):
+        for file in os.listdir('./Database/data'):
+            if os.stat(f'./Database/data/{file}').st_size <= 7800000:
+                f = open(f'./Database/data/{file}')
+                f = f.read()
+                lines = f.splitlines(True)
+                print(lines)
+                lines[-1] = lines[-1] + '\n'
+                lines.append(f'{member.id}: 0\n')
+                with open(f'./Database/data/{file}', 'w') as file:
+                    file.writelines(lines)
+                    file.close()
+                    await reload_database()
+                    break
+
+@client.command(help='Registers a Member')
+async def register(ctx, member : discord.Member):
+    await new(member)
+
 async def db_files():
     global db
     messages = await db.history(limit=None, oldest_first=True).flatten()
@@ -29,6 +58,7 @@ async def db_files():
             file = await msg.attachments[0].read()
             with open(f'./Database/data/{file_num}.txt', 'wb') as f:
                 f.write(file)
+                f.close()
             file_num += 1
 
 async def find_dir_files(member):
@@ -47,25 +77,33 @@ async def find_dir_files(member):
 async def add_data(member, num):
     data = None
     for file in os.listdir('./Database/data'):
-        f = open(f'./Database/data/{file}', 'r').read()
-        lines = f.splitlines()
+        f = open(f'./Database/data/{file}')
+        f = f.read()
+        lines = f.splitlines(True)
         for i in range(len(lines)):
             if str(member.id) in lines[i]:
                 data = lines[i][20:]
-                lines[i] = f'{member.id}: {int(data) + num}'
+                lines[i] = f'{member.id}: {int(data) + num}\n'
                 with open(f'./Database/data/{file}', 'w') as file:
                     file.writelines(lines)
                 break
     if not data:
         return False
 
+async def reload_database():
+    global db
+    await db.purge(limit=None)
+    messages = await db.history().flatten()
+    if messages == []:
+        for file in os.listdir('./Database/data'):
+            await db.send(file=discord.File(f'./Database/data/{file}'))
+
 @client.command(help='Add')
 @commands.has_permissions(administrator=True)
 async def add(ctx, member : discord.Member, num : int):
     await db_files()
     await add_data(member, num)
-    await databaseclear(ctx)
-    await databaseload(ctx)
+    await reload_database()
     await ctx.send(f'```DATABASE: Added {num} to {member}```')
 
 @client.command(aliases=['data'], help='Find Data')
