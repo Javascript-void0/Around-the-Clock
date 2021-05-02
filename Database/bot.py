@@ -1,5 +1,6 @@
 import discord
 import os
+from asyncio import sleep
 from discord.ext import commands, tasks
 from discord.utils import get
 
@@ -114,7 +115,7 @@ async def timerStart(member):
     time[member.id] = 0
     count[member.id] = True
     while count[member.id] == True:
-        await asyncio.sleep(1)
+        await sleep(1)
         time[member.id] += 1
 
 @client.command(help='Registers a Member')
