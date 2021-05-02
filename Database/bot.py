@@ -37,7 +37,7 @@ async def new(member):
                 f = f.read()
                 lines = f.splitlines(True)
                 lines[-1] = lines[-1] + '\n'
-                lines.append(f'{member.id}: 0\n')
+                lines.append(f'{member.id}: 1\n')
                 with open(f'./Database/data/{file}', 'w') as file:
                     file.writelines(lines)
                     file.close()
@@ -183,8 +183,10 @@ async def on_message(message):
             await reload_database()
         else:
             await new(message.author)
-            await modify_data(message.author, "add", 1)
             await reload_database()
+    
+    await client.process_commands(message)
+
 
 if __name__ == '__main__':
     client.run(TOKEN)

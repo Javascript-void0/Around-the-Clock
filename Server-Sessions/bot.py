@@ -87,9 +87,11 @@ async def toggle(ctx):
         if str(ctx.message.author.id) in msg.content:
             await msg.delete()
             on = False
+            await ctx.send('```Notifications Turned OFF```')
             break
     if on:
         await channel.send(ctx.message.author.id)
+        await ctx.send('```Notifications Turned ON```')
 
 @timer_start.before_loop
 async def before_timer_start():
