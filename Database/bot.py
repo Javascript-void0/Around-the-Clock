@@ -4,7 +4,8 @@ from asyncio import sleep
 from discord.ext import commands, tasks
 from discord.utils import get
 
-client = commands.Bot(command_prefix='.')
+intents = discord.Intents.default()
+client = commands.Bot(command_prefix='.', intents=intents)
 TOKEN = os.getenv("TOKEN")
 
 db = None
