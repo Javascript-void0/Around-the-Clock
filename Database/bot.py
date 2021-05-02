@@ -39,7 +39,6 @@ async def register(member):
                 f = open(f'./Database/data/{file}')
                 f = f.read()
                 lines = f.splitlines(True)
-                lines[-1] = lines[-1] + '\n'
                 lines.append(f'{member.id}: 1\n')
                 with open(f'./Database/data/{file}', 'w') as file:
                     file.writelines(lines)
@@ -118,10 +117,11 @@ async def timerStart(member):
         await sleep(1)
         time[member.id] += 1
 
-@client.command(help='Registers a Member')
+@client.command(name='register', help='Registers a Member')
 @commands.has_permissions(administrator=True)
-async def register(ctx, member : discord.Member):
+async def _register(ctx, member : discord.Member):
     await register(member)
+    await ctx.send(f'```DATABASE: Registered {member}```')
 
 @client.command(help='Add')
 @commands.has_permissions(administrator=True)
