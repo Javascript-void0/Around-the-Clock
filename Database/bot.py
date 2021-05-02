@@ -9,6 +9,8 @@ TOKEN = os.getenv("TOKEN")
 db = None
 guild = None
 atc = None
+count = {}
+time = {}
 
 @client.event
 async def on_ready():
@@ -21,16 +23,16 @@ async def on_ready():
     await db_files()
 
 # Check is member is registered
-async def exists(member):
+async def registered(member):
     data = await find_dir_files(member)
     if data:
         return True
     return False
 
-# Adds New member
-async def new(member):
+# Adds register member
+async def register(member):
     global db
-    if not await exists(member):
+    if not await registered(member):
         for file in os.listdir('./Database/data'):
             if os.stat(f'./Database/data/{file}').st_size <= 7800000:
                 f = open(f'./Database/data/{file}')
@@ -107,17 +109,24 @@ async def reload_database():
         for file in os.listdir('./Database/data'):
             await db.send(file=discord.File(f'./Database/data/{file}'))
 
+# Start Timer in Voice Channel
+async def timerStart(member):
+    time[member.id] = 0
+    count[member.id] = True
+    while count[member.id] == True:
+        await asyncio.sleep(1)
+        time[member.id] += 1
+
 @client.command(help='Registers a Member')
 @commands.has_permissions(administrator=True)
 async def register(ctx, member : discord.Member):
-    await new(member)
+    await register(member)
 
 @client.command(help='Add')
 @commands.has_permissions(administrator=True)
 async def add(ctx, member : discord.Member, num : int):
     if num > 0:
         await modify_data(member, 'add', num)
-        await reload_database()
         await ctx.send(f'```DATABASE: Added {num} to {member}```')
     else:
         await ctx.send(f'```DATABASE: Integer must be positive```')
@@ -127,7 +136,6 @@ async def add(ctx, member : discord.Member, num : int):
 async def remove(ctx, member : discord.Member, num : int):
     if num > 0:
         await modify_data(member, 'remove', num)
-        await reload_database()
         await ctx.send(f'```DATABASE: Removed {num} from {member}```')
     else:
         await ctx.send(f'```DATABASE: Integer must be positive```')
@@ -136,7 +144,6 @@ async def remove(ctx, member : discord.Member, num : int):
 @commands.has_permissions(administrator=True)
 async def reset(ctx, member : discord.Member):
     await modify_data(member, 'reset', 0)
-    await reload_database()
     await ctx.send(f'```DATABASE: Reset {member} to 0```')
 
 @client.command(help='Set Member Data')
@@ -144,7 +151,6 @@ async def reset(ctx, member : discord.Member):
 async def set(ctx, member : discord.Member, num : int):
     if num > 0:
         await modify_data(member, 'set', num)
-        await reload_database()
         await ctx.send(f'```DATABASE: Set {member} to {num}```')
     else:
         await ctx.send(f'```DATABASE: Integer must be positive```')
@@ -178,15 +184,37 @@ async def databaseload(ctx):
 async def on_message(message):
     global atc
     if message.guild == atc:
-        if await exists(message.author):
+        if await registered(message.author):
             await modify_data(message.author, "add", 1)
-            await reload_database()
         else:
-            await new(message.author)
-            await reload_database()
+            await register(message.author)
     
     await client.process_commands(message)
 
+@client.event
+async def on_voice_state_update(member, before, after):
+    global db
+    if before.channel is None:
+        print(f'{member} joined #{after.channel.name}')
+        if await registered(member):
+            await timerStart(member)
+        else:
+            await register(member)
+            await timerStart(member)
+    elif after.channel is None:
+        print(f'{member} left #{before.channel.name}')
+        count[member.id] = False
+        await modify_data(member, "add", time[member.id])
 
+@tasks.loop(minutes=1.0)
+async def loop_restart():
+    await reload_database()
+
+@loop_restart.before_loop
+async def before_loop_restart():
+    print('waiting...')
+    await client.wait_until_ready()
+
+loop_restart.start()
 if __name__ == '__main__':
     client.run(TOKEN)
