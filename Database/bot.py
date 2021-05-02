@@ -8,18 +8,19 @@ TOKEN = os.getenv("TOKEN")
 
 db = None
 guild = None
+atc = None
 
 @client.event
 async def on_ready():
-    global db, guild
+    global db, guild, atc
     guild = client.get_guild(805299220935999509)
+    atc = client.get_guild(802565984602423367)
     db = guild.get_channel(834943847602978836)
     print('[ + ] Started {0.user}'.format(client))
     print(f'[ + ] Connected to database...')
 
 # Check is member is registered
 async def exists(member):
-    await db_files()
     data = await find_dir_files(member)
     if data:
         return True
@@ -28,14 +29,12 @@ async def exists(member):
 # Adds New member
 async def new(member):
     global db
-    await db_files()
     if not await exists(member):
         for file in os.listdir('./Database/data'):
             if os.stat(f'./Database/data/{file}').st_size <= 7800000:
                 f = open(f'./Database/data/{file}')
                 f = f.read()
                 lines = f.splitlines(True)
-                print(lines)
                 lines[-1] = lines[-1] + '\n'
                 lines.append(f'{member.id}: 0\n')
                 with open(f'./Database/data/{file}', 'w') as file:
@@ -48,9 +47,7 @@ async def new(member):
 async def db_files():
     global db
     messages = await db.history(limit=None, oldest_first=True).flatten()
-    if messages == []:
-        await ctx.send('```No Files Found```')
-    else:
+    if messages:
         file_num = 1
         for msg in messages:
             file = await msg.attachments[0].read()
@@ -110,6 +107,7 @@ async def reload_database():
             await db.send(file=discord.File(f'./Database/data/{file}'))
 
 @client.command(help='Registers a Member')
+@commands.has_permissions(administrator=True)
 async def register(ctx, member : discord.Member):
     await new(member)
 
@@ -117,7 +115,6 @@ async def register(ctx, member : discord.Member):
 @commands.has_permissions(administrator=True)
 async def add(ctx, member : discord.Member, num : int):
     if num > 0:
-        await db_files()
         await modify_data(member, 'add', num)
         await reload_database()
         await ctx.send(f'```DATABASE: Added {num} to {member}```')
@@ -128,7 +125,6 @@ async def add(ctx, member : discord.Member, num : int):
 @commands.has_permissions(administrator=True)
 async def remove(ctx, member : discord.Member, num : int):
     if num > 0:
-        await db_files()
         await modify_data(member, 'remove', num)
         await reload_database()
         await ctx.send(f'```DATABASE: Removed {num} from {member}```')
@@ -137,7 +133,6 @@ async def remove(ctx, member : discord.Member, num : int):
 @client.command(help='Reset Member Data')
 @commands.has_permissions(administrator=True)
 async def reset(ctx, member : discord.Member):
-    await db_files()
     await modify_data(member, 'reset', 0)
     await reload_database()
     await ctx.send(f'```DATABASE: Reset {member} to 0```')
@@ -146,17 +141,15 @@ async def reset(ctx, member : discord.Member):
 @commands.has_permissions(administrator=True)
 async def set(ctx, member : discord.Member, num : int):
     if num > 0:
-        await db_files()
         await modify_data(member, 'set', num)
         await reload_database()
         await ctx.send(f'```DATABASE: Set {member} to {num}```')
     else:
         await ctx.send(f'```DATABASE: Integer must be positive```')
 
-@client.command(aliases=['data', 'search'], help='Find Data')
+@client.command(aliases=['data', 'search', 'stat', 'stats'], help='Find Data')
 async def find(ctx, member : discord.Member):
     global db
-    await db_files()
     data = await find_dir_files(member)
     if data:
         await ctx.send(f'```[{member.id}]\n{member} - {data}```')
@@ -178,6 +171,13 @@ async def databaseload(ctx):
     if messages == []:
         for file in os.listdir('./Database/data'):
             await db.send(file=discord.File(f'./Database/data/{file}'))
+
+@client.event
+async def on_message(message):
+    global atc
+    if message.guild == atc:
+        await modify_data(message.author, "add", 1)
+        await reload_database()
 
 if __name__ == '__main__':
     client.run(TOKEN)
