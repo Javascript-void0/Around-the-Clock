@@ -18,6 +18,7 @@ async def on_ready():
     db = guild.get_channel(834943847602978836)
     print('[ + ] Started {0.user}'.format(client))
     print(f'[ + ] Connected to database...')
+    await db_files()
 
 # Check is member is registered
 async def exists(member):
@@ -176,8 +177,13 @@ async def databaseload(ctx):
 async def on_message(message):
     global atc
     if message.guild == atc:
-        await modify_data(message.author, "add", 1)
-        await reload_database()
+        if exists(message.author):
+            await modify_data(message.author, "add", 1)
+            await reload_database()
+        else:
+            await new(message.author)
+            await modify_data(message.author, "add", 1)
+            await reload_database()
 
 if __name__ == '__main__':
     client.run(TOKEN)
