@@ -79,7 +79,7 @@ async def modify_data(member, action, num):
     for file in os.listdir('./Database/data'):
         f = open(f'./Database/data/{file}')
         f = f.read()
-        line = f.splitlines(True)
+        lines = f.splitlines(True)
         for i in range(len(lines)):
             if str(member.id) in lines[i]:
                 data = lines[i][20:]
