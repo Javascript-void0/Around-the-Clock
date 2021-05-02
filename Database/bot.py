@@ -131,6 +131,7 @@ async def remove(ctx, member : discord.Member, num : int):
         await ctx.send(f'```DATABASE: Removed {num} from {member}```')
     else:
         await ctx.send(f'```DATABASE: Integer must be positive```')
+        
 @client.command(help='Reset Member Data')
 @commands.has_permissions(administrator=True)
 async def reset(ctx, member : discord.Member):
@@ -177,7 +178,7 @@ async def databaseload(ctx):
 async def on_message(message):
     global atc
     if message.guild == atc:
-        if exists(message.author):
+        if await exists(message.author):
             await modify_data(message.author, "add", 1)
             await reload_database()
         else:

@@ -1,41 +1,39 @@
 import discord
 import os
 import asyncio
+import time
 from discord.ext import tasks, commands
 from discord.utils import get
 
-client = commands.Bot(command_prefix='.')
+intents = discord.Intents.default()
+intents.members = True
+client = commands.Bot(command_prefix='.', intents=intents)
 TOKEN = os.getenv("SS_TOKEN")
 
 @client.event
 async def on_ready():
     print('Started {0.user}'.format(client))
-    await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name="#▹fireplace_study"))
 
-@tasks.loop(minutes=1.0)
+@tasks.loop(seconds=1.0)
 async def timer_start():
 
     guild = client.get_guild(802565984602423367)
-#    channel = guild.get_channel(802567364658855976)
-#    voice = get(client.voice_clients, guild=guild)
-#    voice = await channel.connect()
+    guild2 = client.get_guild(805299220935999509)
+    channel = guild2.get_channel(838431117006340106)
     member = guild.me
 
     shortBreak = False
     longBreak = False
-    t = 1501
+    t = 1500
     r = 1
 
     while True:
-        await asyncio.sleep(1) 
-        t -= 1
+        await asyncio.sleep(5) 
+        t -= 5
         print(t)
+        m, s = divmod(t,60)
 
-        if t == 1500:
-            await member.edit(nick='Time Left: 25m 0s')
-#            voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
-
-        elif t == 10:
+        if t == 0:
             if r == 0:
                 shortBreak = False
                 longBreak = False
@@ -51,35 +49,47 @@ async def timer_start():
             elif r % 2 == 1:
                 shortBreak = True
                 longBreak = False
-
-        elif t == 0:
             r += 1
             if r == 10:
                 r = 0
+            messages = await channel.history(limit=None).flatten()
             if shortBreak == True:
-                t = 301
-#                voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
+                t = 300
+                for msg in messages:
+                    user = guild.get_member(int(msg.content))
+                    await user.send('```Study Time over, take a 5 minute break.```')
             elif longBreak == True:
-                t = 901
-#                voice.play(discord.FFmpegPCMAudio(source="assets/alarm.mp3"))
+                t = 900
+                for msg in messages:
+                    user = guild.get_member(int(msg.content))
+                    await user.send('```Study Time over, take a 15 minute break.```')
             else:
-                t = 1501
+                t = 1500
+                for msg in messages:
+                    user = guild.get_member(int(msg.content))
+                    await user.send('```Break Time over, time to study for 25 minutes!```')
 
-        elif t % 30 == 0:
-            if t % 60 == 0:
-                m = t // 60
-                s = 0
-            else:
-                m = t // 30
-                m -= 1
-                m = m // 2
-                s = 30
-            if longBreak == True:
-                await member.edit(nick='Long Break: {}m {}s'.format(m,s))
-            elif shortBreak == True:
-                await member.edit(nick='Short Break: {}m {}s'.format(m,s))    
-            else:
-                await member.edit(nick='Time Left: {}m {}s'.format(m,s))
+        if longBreak == True:
+            await member.edit(nick='Long Break:')
+        elif shortBreak == True:
+            await member.edit(nick='Short Break:')    
+        else:
+            await member.edit(nick='Time Left:')
+        await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='{:02}m {:02}s | .toggle'.format(m,s)))
+
+@client.command(help='Tune into DM notifications')
+async def toggle(ctx):
+    guild = client.get_guild(805299220935999509)
+    channel = guild.get_channel(838431117006340106)
+    messages = await channel.history(limit=None).flatten()
+    on = True
+    for msg in messages:
+        if str(ctx.message.author.id) in msg.content:
+            await msg.delete()
+            on = False
+            break
+    if on:
+        await channel.send(ctx.message.author.id)
 
 @timer_start.before_loop
 async def before_timer_start():
