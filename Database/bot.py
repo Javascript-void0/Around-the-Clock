@@ -5,6 +5,7 @@ from discord.ext import commands, tasks
 from discord.utils import get
 
 intents = discord.Intents.default()
+intents.members = True
 client = commands.Bot(command_prefix='.', intents=intents)
 TOKEN = os.getenv("TOKEN")
 
@@ -44,7 +45,6 @@ async def register(member):
                 with open(f'./Database/data/{file}', 'w') as file:
                     file.writelines(lines)
                     file.close()
-                    await reload_database()
                     break
 
 # Takes files from Database and saves to directory
@@ -182,10 +182,29 @@ async def databaseload(ctx):
         for file in os.listdir('./Database/data'):
             await db.send(file=discord.File(f'./Database/data/{file}'))
 
+@client.command(aliases=['dbclean', 'databaseclean', 'cleandatabase'], help='Cleans extra data')
+@commands.has_permissions(administrator=True)
+async def cleandb(ctx):
+    global db
+    if ctx.guild == atc:
+        for file in os.listdir('./Database/data'):
+            f = open(f'./Database/data/{file}')
+            f = f.read()
+            lines = f.splitlines(True)
+            for i in range(len(lines)-1, -1, -1):
+                if ': 1\n' in lines[i]:
+                    lines.pop(i)
+            with open(f'./Database/data/{file}', 'w') as file:
+                file.writelines(lines)
+                file.close()
+        await ctx.send('```DATABASE: Cleaned```')
+
+# EVENTS TO ADD SCORE
+
 @client.event
 async def on_message(message):
     global atc
-    if message.guild == atc:
+    if message.guild == atc and not message.author.bot:
         if await registered(message.author):
             await modify_data(message.author, "add", 1)
         else:
@@ -196,17 +215,23 @@ async def on_message(message):
 @client.event
 async def on_voice_state_update(member, before, after):
     global db
-    if before.channel is None:
-        print(f'{member} joined #{after.channel.name}')
-        if await registered(member):
-            await timerStart(member)
-        else:
-            await register(member)
-            await timerStart(member)
-    elif after.channel is None:
-        print(f'{member} left #{before.channel.name}')
-        count[member.id] = False
-        await modify_data(member, "add", time[member.id])
+    try:
+        if after.channel is None and not member.bot:
+            print(f'{member} left #{before.channel.name}')
+            count[member.id] = False
+            await modify_data(member, "add", time[member.id])
+        if after.channel.guild == atc and not member.bot:
+            print(f'{member} joined #{after.channel.name}')
+            if await registered(member):
+                await timerStart(member)
+            else:
+                await register(member)
+                await timerStart(member)
+        
+    except AttributeError:
+        pass
+
+# LOOP TO RELOAD FILE
 
 @tasks.loop(minutes=1.0)
 async def loop_restart():
