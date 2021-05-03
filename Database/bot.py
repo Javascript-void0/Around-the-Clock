@@ -12,17 +12,21 @@ TOKEN = os.getenv("TOKEN")
 db = None
 guild = None
 atc = None
+log = None
 count = {}
 time = {}
 
 @client.event
 async def on_ready():
-    global db, guild, atc
+    global db, guild, atc, log
     guild = client.get_guild(805299220935999509)
     atc = client.get_guild(802565984602423367)
     db = guild.get_channel(834943847602978836)
+    log = guild.get_channel(838612591277375518)
     print('[ + ] Started {0.user}'.format(client))
     print(f'[ + ] Connected to database...')
+    await log.send('```DATABASE: Started {0.user}```'.format(client))
+    await log.send(f'```DATABASE: Connected to database...```')
     await db_files()
 
 # Check is member is registered
@@ -34,9 +38,11 @@ async def registered(member):
 
 # Adds register member
 async def register(member):
-    global db
-    if not await registered(member):
+    global db, log
+    if not await registered(member) and not member.bot:
+        file_num = 0
         for file in os.listdir('./Database/data'):
+            file_num += 1
             if os.stat(f'./Database/data/{file}').st_size <= 7800000:
                 f = open(f'./Database/data/{file}')
                 f = f.read()
@@ -45,11 +51,18 @@ async def register(member):
                 with open(f'./Database/data/{file}', 'w') as file:
                     file.writelines(lines)
                     file.close()
-                    break
-
+                    await log.send(f'```DATABASE: Registered {member}```')
+                    return
+        file_num += 1
+        with open(f'./Database/data/2.txt', 'w') as file:
+            file.write(f'{member.id}: 1\n')
+            file.close()
+            await log.send(f'```DATABASE: Registered {member}```')
+            return
+            
 # Takes files from Database and saves to directory
 async def db_files():
-    global db
+    global db, log
     messages = await db.history(limit=None, oldest_first=True).flatten()
     if messages:
         file_num = 1
@@ -58,6 +71,7 @@ async def db_files():
             with open(f'./Database/data/{file_num}.txt', 'wb') as f:
                 f.write(file)
                 f.close()
+            await log.send(f'```DATABASE: Saved {file_num}.txt to Directory```')
             file_num += 1
 
 # Searches and Returns Player's Data
@@ -76,6 +90,7 @@ async def find_dir_files(member):
 
 # Admin Manual Modify Player Data
 async def modify_data(member, action, num):
+    global log
     data = None
     for file in os.listdir('./Database/data'):
         f = open(f'./Database/data/{file}')
@@ -86,12 +101,16 @@ async def modify_data(member, action, num):
                 data = lines[i][20:]
                 if action == 'add':
                     x = int(data) + num
+                    await log.send(f'```DATABASE: Added {num} to {member}```')
                 elif action == 'remove':
                     x = int(data) - num
+                    await log.send(f'```DATABASE: Removed {num} from {member}```')
                 elif action == 'reset':
                     x = 0
+                    await log.send(f'```DATABASE: Reset{member} to 0```')
                 elif action == 'set':
                     x = num
+                    await log.send(f'```DATABASE: Set {member} to {num}```')
                 if x < 0:
                     x = 0
                 lines[i] = f'{member.id}: {x}\n'
@@ -103,17 +122,20 @@ async def modify_data(member, action, num):
 
 # Deletes and replaces with Directory Files
 async def reload_database():
-    global db
+    global db, log
     await db.purge(limit=None)
     messages = await db.history().flatten()
     if messages == []:
         for file in os.listdir('./Database/data'):
             await db.send(file=discord.File(f'./Database/data/{file}'))
+            await log.send(f'```DATABASE: Reloaded with {file}.txt:```', file=discord.File(f'./Database/data/{file}'))  
 
 # Start Timer in Voice Channel
 async def timerStart(member):
+    global log
     time[member.id] = 0
     count[member.id] = True
+    await log.send(f'```DATABASE: Timer started for {member}```')
     while count[member.id] == True:
         await sleep(1)
         time[member.id] += 1
@@ -181,6 +203,8 @@ async def databaseload(ctx):
     if messages == []:
         for file in os.listdir('./Database/data'):
             await db.send(file=discord.File(f'./Database/data/{file}'))
+            await log.send('```DATABASE: Loaded```', file=discord.File(f'./Database/data/{file}'))
+    await ctx.send('```DATABASE: Loaded```')
 
 @client.command(aliases=['dbclean', 'databaseclean', 'cleandatabase'], help='Cleans extra data')
 @commands.has_permissions(administrator=True)
@@ -192,12 +216,18 @@ async def cleandb(ctx):
             f = f.read()
             lines = f.splitlines(True)
             for i in range(len(lines)-1, -1, -1):
-                if ': 1\n' in lines[i]:
+                if ': 0\n' in lines[i]:
                     lines.pop(i)
             with open(f'./Database/data/{file}', 'w') as file:
                 file.writelines(lines)
                 file.close()
         await ctx.send('```DATABASE: Cleaned```')
+        await log.send('```DATABASE: Cleaned```')
+
+@client.command(help='Send Database File')
+async def file(ctx):
+    for file in os.listdir('./Database/data'):
+        await ctx.send(file=discord.File(f'./Database/data/{file}'))
 
 # EVENTS TO ADD SCORE
 
@@ -214,20 +244,21 @@ async def on_message(message):
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    global db
+    global db, log
     try:
         if after.channel is None and not member.bot:
             print(f'{member} left #{before.channel.name}')
+            await log.send(f'```{member} left #{before.channel.name}```')
             count[member.id] = False
             await modify_data(member, "add", time[member.id])
         if after.channel.guild == atc and not member.bot:
             print(f'{member} joined #{after.channel.name}')
+            await log.send(f'```{member} joined #{after.channel.name}```')
             if await registered(member):
                 await timerStart(member)
             else:
                 await register(member)
                 await timerStart(member)
-        
     except AttributeError:
         pass
 
@@ -240,6 +271,7 @@ async def loop_restart():
 @loop_restart.before_loop
 async def before_loop_restart():
     print('waiting...')
+    await log.send('```DATABASE: waiting...```')
     await client.wait_until_ready()
 
 loop_restart.start()
