@@ -13,16 +13,18 @@ db = None
 guild = None
 atc = None
 log = None
+file_log = None
 count = {}
 time = {}
 
 @client.event
 async def on_ready():
-    global db, guild, atc, log
+    global db, guild, atc, log, file_log
     guild = client.get_guild(805299220935999509)
     atc = client.get_guild(802565984602423367)
     db = guild.get_channel(834943847602978836)
     log = guild.get_channel(838612591277375518)
+    file_log = guild.get_channel(839164203449188372)
     print('[ + ] Started {0.user}'.format(client))
     print(f'[ + ] Connected to database...')
     await log.send('```DATABASE: Started {0.user}```'.format(client))
@@ -122,13 +124,13 @@ async def modify_data(member, action, num):
 
 # Deletes and replaces with Directory Files
 async def reload_database():
-    global db, log
+    global db, file_log
     await db.purge(limit=None)
     messages = await db.history().flatten()
     if messages == []:
         for file in os.listdir('./Database/data'):
             await db.send(file=discord.File(f'./Database/data/{file}'))
-            await log.send(file=discord.File(f'./Database/data/{file}'))  
+            await file_log.send(file=discord.File(f'./Database/data/{file}'))  
 
 # Start Timer in Voice Channel
 async def timerStart(member):
