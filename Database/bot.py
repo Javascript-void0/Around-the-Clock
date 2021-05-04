@@ -128,7 +128,7 @@ async def reload_database():
     if messages == []:
         for file in os.listdir('./Database/data'):
             await db.send(file=discord.File(f'./Database/data/{file}'))
-            await log.send(f'```DATABASE: Reloaded with {file}.txt:```', file=discord.File(f'./Database/data/{file}'))  
+            await log.send(file=discord.File(f'./Database/data/{file}'))  
 
 # Start Timer in Voice Channel
 async def timerStart(member):
@@ -137,7 +137,7 @@ async def timerStart(member):
     count[member.id] = True
     await log.send(f'```DATABASE: Timer started for {member}```')
     while count[member.id] == True:
-        await sleep(1)
+        await sleep(60)
         time[member.id] += 1
 
 @client.command(name='register', help='Registers a Member')
@@ -236,7 +236,20 @@ async def on_message(message):
     global atc
     if message.guild == atc and not message.author.bot:
         if await registered(message.author):
-            await modify_data(message.author, "add", 1)
+            if message.channel.id == 805491870183981116 and len(str(message.content)) >= 25: # intros
+                await modify_data(message.author, "add", 25)
+            elif message.channel.id == 806150413773963275: # todo
+                await modify_data(message.author, "add", 10)
+            elif message.channel.id == 802577298267963412 and message.content == '!d bump':
+                await modify_data(message.author, "add", 5)
+            elif message.channel.id == 818507546376798228: # motivation
+                await modify_data(message.author, "add", 3)
+            elif message.channel.id == 802565985055014953: # welcome
+                await modify_data(message.author, "add", 2)
+            elif message.channel.id == 802915711122014278: # sessions
+                await modify_data(message.author, "add", 3)
+            else:
+                await modify_data(message.author, "add", 1)
         else:
             await register(message.author)
     
