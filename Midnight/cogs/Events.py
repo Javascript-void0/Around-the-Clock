@@ -17,9 +17,9 @@ class Events(commands.Cog):
         await member.add_roles(role)
 
         # Welcome
-        verify = ctx.guild.get_channel(802566612187349013)
+        verify = guild.get_channel(802566612187349013)
         lobby = guild.get_channel(802565985055014956)
-        roles = ctx.guild.get_channel(802694715019100161)
+        roles = guild.get_channel(802694715019100161)
         embed = discord.Embed(title = f"Yawn... Oh- Welcome! {member}", description = f"First Verify in {verify.mention} :D.\nThen Grab Some {roles.mention}\nor hangout in {lobby.mention}", color = discord.Color.dark_teal())
         embed.set_thumbnail(url=member.avatar_url)
         embed.set_image(url="https://64.media.tumblr.com/752e98a41362e1c7e51c7a50a78c179c/f56cd24a7cd794d6-54/s2048x3072_c0,0,100000,85880/782343118d50eddb426ac93204cac586f38469cd.gif")
