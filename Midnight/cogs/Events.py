@@ -17,13 +17,14 @@ class Events(commands.Cog):
         await member.add_roles(role)
 
         # Welcome
-        r = guild.get_channel(802581706816487474)
+        verify = ctx.guild.get_channel(802566612187349013)
         lobby = guild.get_channel(802565985055014956)
-        embed = discord.Embed(title = "Yawn... Oh! Welcome :D", description = f"Welcome to Around the Clock {member.mention}!\nFirst Verify in {r.mention} :D\nThen Grab Some Roles, or hangout in {lobby.mention}", color = discord.Color.dark_teal())
+        roles = ctx.guild.get_channel(802694715019100161)
+        embed = discord.Embed(title = f"Yawn... Oh- Welcome! {member}", description = f"First Verify in {verify.mention} :D.\nThen Grab Some {roles.mention}\nor hangout in {lobby.mention}", color = discord.Color.dark_teal())
         embed.set_thumbnail(url=member.avatar_url)
         embed.set_image(url="https://64.media.tumblr.com/752e98a41362e1c7e51c7a50a78c179c/f56cd24a7cd794d6-54/s2048x3072_c0,0,100000,85880/782343118d50eddb426ac93204cac586f38469cd.gif")
         embed.set_footer(text="Enjoy Your Stay {}".format(member.name), icon_url = "https://media.tenor.com/images/dae19cf6b07682c4acf67dfc880f11f5/tenor.gif")
-        await channel.send(embed=embed)
+        await channel.send(member.mention, embed=embed)
 
         members = guild.get_channel(802737096640036924)
         count = 0

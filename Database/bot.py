@@ -285,7 +285,6 @@ async def loop_restart():
 async def before_loop_restart():
     global log
     print('waiting...')
-    await log.send('```DATABASE: waiting...```')
     await client.wait_until_ready()
 
 loop_restart.start()
