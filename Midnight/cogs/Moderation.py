@@ -70,7 +70,8 @@ class Moderation(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if "discord.gg/" in message.content:
-            await message.delete()
+            if not message.author.server_permssions.administrator:
+                await message.delete()
 
 def setup(client):
     client.add_cog(Moderation(client))

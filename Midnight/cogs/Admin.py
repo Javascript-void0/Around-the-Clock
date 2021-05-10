@@ -17,7 +17,7 @@ class Admin(commands.Cog):
         self.client = client
 
     @commands.command(aliases=['cl'], help='Input for Changlogs')
-    @commands.has_role("Admin")
+    @commands.has_permissions(administrator=True)
     async def changelog(self, ctx, *, change):
         channel = ctx.guild.get_channel(802571459712516156)
         d = datetime.date.today().strftime("%b %d")
@@ -55,7 +55,7 @@ class Admin(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['testcl'], help='Test Changlogs')
-    @commands.has_role("Admin")
+    @commands.has_permissions(administrator=True)
     async def testchangelog(self, ctx, *, change):
         d = datetime.date.today().strftime("%b %d")
         embed = discord.Embed(title = "Change Log")
@@ -64,7 +64,7 @@ class Admin(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(help='Test sessions format')
-    @commands.has_role("Admin")
+    @commands.has_permissions(administrator=True)
     async def testsession(self, ctx, *, message=None):
         mention = discord.utils.get(ctx.guild.roles, name='Study Session')
         if message is None:
@@ -77,7 +77,7 @@ class Admin(commands.Cog):
         await ctx.message.delete()
 
     @commands.command(help='Test sessions format')
-    @commands.has_role("Admin")
+    @commands.has_permissions(administrator=True)
     async def testhours(self, ctx, link, *, message=None):
         mention = discord.utils.get(ctx.guild.roles, name='Study Session')
         if message is None:
@@ -95,7 +95,7 @@ class Admin(commands.Cog):
             await ctx.send('Hours Invite Link')
 
     @commands.command(help='Ends Sessions')
-    @commands.has_role("Admin")
+    @commands.has_permissions(administrator=True)
     async def testend(self, ctx, msgid : int = None):
         mention = discord.utils.get(ctx.guild.roles, name='Study Session')
         if msgid is None:
@@ -107,7 +107,7 @@ class Admin(commands.Cog):
         await ctx.message.delete()
 
     @commands.command(aliases=['traveler_update', 'mu', 'tu'], help='update member count')
-    @commands.has_role("Admin")
+    @commands.has_permissions(administrator=True)
     async def member_update(self, ctx):
         guild = self.client.get_guild(802565984602423367)
         members = guild.get_channel(802737096640036924)
