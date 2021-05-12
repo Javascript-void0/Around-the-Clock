@@ -126,12 +126,7 @@ async def modify_data(member, action, num):
 async def reload_database():
     global db, file_log
     await db.purge(limit=None)
-    files = []
     messages = await db.history().flatten()
-    for file in os.listdir('./Database/txt'):
-        files.append(file)
-    if files == []:
-        await db_files()
     if messages == []:
         for file in os.listdir('./Database/txt'):
             await db.send(file=discord.File(f'./Database/txt/{file}'))
