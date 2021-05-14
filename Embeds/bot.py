@@ -9,7 +9,6 @@ TOKEN = os.getenv("TOKEN")
 @client.event
 async def on_ready():
     print('[ + ] Started {0.user}'.format(client))
-    print(f'[ + ] Connected to database...')
 
 @client.command(help='Rules Embed')
 async def rules(ctx):
@@ -79,6 +78,32 @@ async def colors(ctx):
     anonymous = ctx.guild.get_role(802744112821960724)
     embed = discord.Embed(title='<:down3:823376679463419935> Color Roles', description=f"{cozy.mention}{sunrise.mention}{bright.mention}{clover.mention}{cloud.mention}{sunset.mention}{anonymous.mention}", color=discord.Color(0xFEFDD1))
     embed.set_image(url='https://i.pinimg.com/originals/51/45/23/5145235480824587a34264859401580e.gif')
+    await ctx.send(embed=embed)
+
+@client.command(name='3colors', help='3x Colors Embed')
+async def _3colors(ctx):
+    lp = ctx.guild.get_role(842812625946935306).mention
+    p = ctx.guild.get_role(842812626584600639).mention
+    dp = ctx.guild.get_role(842812628220903474).mention
+    lo = ctx.guild.get_role(842812649275523123).mention
+    o = ctx.guild.get_role(842812649929441321).mention
+    do = ctx.guild.get_role(842812651297570816).mention
+    lb = ctx.guild.get_role(842812660671184957).mention
+    b = ctx.guild.get_role(842812661779136542).mention
+    db = ctx.guild.get_role(842812662567665736).mention
+    lg = ctx.guild.get_role(842812671267307552).mention
+    g = ctx.guild.get_role(842812672239992872).mention
+    dg = ctx.guild.get_role(842812673204944896).mention
+    lbl = ctx.guild.get_role(842812688866607105).mention
+    bl = ctx.guild.get_role(842812689742299168).mention
+    dbl = ctx.guild.get_role(842812691072155678).mention
+    lpu = ctx.guild.get_role(842812703399346308).mention
+    pu = ctx.guild.get_role(842812704795787325).mention
+    dpu = ctx.guild.get_role(842812705764671529).mention
+    lgr = ctx.guild.get_role(842812734634328065).mention
+    gr = ctx.guild.get_role(842812735863652402).mention
+    dgr = ctx.guild.get_role(842812736772505621).mention
+    embed = discord.Embed(title='Color Roles', description=f"{lp}{p}{dp}\n\n{lo}{o}{do}\n\n{lb}{b}{db}\n\n{lg}{g}{dg}\n\n{lbl}{bl}{dbl}\n\n{lpu}{pu}{dpu}\n\n{lgr}{gr}{dgr}")
     await ctx.send(embed=embed)
 
 if __name__ == '__main__':
