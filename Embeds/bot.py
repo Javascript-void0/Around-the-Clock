@@ -68,7 +68,18 @@ async def dms(ctx):
     embed.set_image(url='https://data.whicdn.com/images/305888882/original.gif')
     await ctx.send(embed=embed)
 
-
+@client.command(help='Original Colors Embed')
+async def colors(ctx):
+    cozy = ctx.guild.get_role(802745474742091826)
+    bright = ctx.guild.get_role(802745469407199232)
+    sunrise = ctx.guild.get_role(802745476490330122)
+    clover = ctx.guild.get_role(802745467251195924)
+    cloud = ctx.guild.get_role(802745472263389195)
+    sunset = ctx.guild.get_role(802745470988058665)
+    anonymous = ctx.guild.get_role(802744112821960724)
+    embed = discord.Embed(title='<:down3:823376679463419935> Color Roles', description=f"{cozy.mention}{sunrise.mention}{bright.mention}{clover.mention}{cloud.mention}{sunset.mention}{anonymous.mention}", color=discord.Color(0xFEFDD1))
+    embed.set_image(url='https://i.pinimg.com/originals/51/45/23/5145235480824587a34264859401580e.gif')
+    await ctx.send(embed=embed)
 
 if __name__ == '__main__':
     client.run(TOKEN)
