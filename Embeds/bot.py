@@ -44,8 +44,16 @@ async def studysession(ctx):
 
 @client.command(help='Study Help Embed')
 async def studyhelp(ctx):
+    english = ctx.guild.get_role(842209843275235378).mention
+    biology = ctx.guild.get_role(842209456850337812).mention
+    math = ctx.guild.get_role(842210482718244885).mention
+    language = ctx.guild.get_role(842211473932681266).mention
+    social = ctx.guild.get_role(842210564972609615).mention
+    chemistry = ctx.guild.get_role(842209762853912627).mention
+    programming = ctx.guild.get_role(842213186413527063).mention
+    other = ctx.guild.get_role(842211762832146442).mention
     channel = ctx.guild.get_channel(802565985055014957)
-    embed = discord.Embed(title='<:down4:823376678838861855> Study Help Ping', description='Pingable by all members to get help in {}'.format(channel.mention), color=discord.Color(0x5D7388))
+    embed = discord.Embed(title='<:down4:823376678838861855> Study Help Ping(s)', description=f'Pingable by all members to get help in {channel.mention}\n{english}{biology}{math}{language}{social}{chemistry}{programming}{other}', color=discord.Color(0x5D7388))
     embed.set_image(url='https://i.pinimg.com/originals/7a/e3/c7/7ae3c7ad104a968dc735871c0bf17608.gif')
     embed.set_footer(text='Un-React to turn of Pings')
     await ctx.send(embed=embed)
