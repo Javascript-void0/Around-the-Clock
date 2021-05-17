@@ -51,7 +51,7 @@ async def studyhelp(ctx):
     social = ctx.guild.get_role(842210564972609615).mention
     chemistry = ctx.guild.get_role(842209762853912627).mention
     programming = ctx.guild.get_role(842213186413527063).mention
-    other = ctx.guild.get_role(842211762832146442).mention
+    other = ctx.guild.get_role(805251882820829256).mention
     channel = ctx.guild.get_channel(802565985055014957)
     embed = discord.Embed(title='<:down4:823376678838861855> Study Help Ping(s)', description=f'Pingable by all members to get help in {channel.mention}\n\n`:book:` {english}. . . . . . . .`:seed:` {biology}\n`:infi:` {math}. . . . . . . . . `:talk:` {language}\n`:pepl:` {social}. `:tube:` {chemistry}\n`:comp:` {programming} . `:ques:` {other}', color=discord.Color(0x5D7388))
     embed.set_image(url='https://i.pinimg.com/originals/7a/e3/c7/7ae3c7ad104a968dc735871c0bf17608.gif')
@@ -73,7 +73,7 @@ async def pronouns(ctx):
 
 @client.command(help='DMs Embed')
 async def dms(ctx):
-    embed = discord.Embed(title='<:down2:823376679166541834> DMs Roles', description="`dm's open` `ask to dm` `dm's closed`", color=discord.Color(0x447352))
+    embed = discord.Embed(title='<:down2:823376679166541834> DMs Roles', description="```🔴: dm's open | 🟡: ask to dm | 🟢: dm's closed```", color=discord.Color(0x447352))
     embed.set_image(url='https://data.whicdn.com/images/305888882/original.gif')
     await ctx.send(embed=embed)
 
