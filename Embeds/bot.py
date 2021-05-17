@@ -67,7 +67,8 @@ async def continents(ctx):
 
 @client.command(help='Pronouns Embed')
 async def pronouns(ctx):
-    embed = discord.Embed(title='<:down2:823376679166541834> Pronoun Role(s)', description='`he/him` `she/her` `they/them`', color=discord.Color(0x447352))
+    embed = discord.Embed(title='<:down2:823376679166541834> Pronoun Role(s)', description='```he/him   |   she/her   |   they/them```', color=discord.Color(0x447352))
+    # embed = discord.Embed(title='<:down2:823376679166541834> Pronoun Role(s)', description='`he/him` `she/her` `they/them`', color=discord.Color(0x447352))
     embed.set_image(url='https://64.media.tumblr.com/cc2e727667a023f6a89e80513c4d8649/tumblr_pdk42eWuKq1rnbw6mo1_1280.gifv')
     await ctx.send(embed=embed)
 
@@ -79,15 +80,15 @@ async def dms(ctx):
 
 @client.command(help='Original Colors Embed')
 async def colors(ctx):
-    # cozy = ctx.guild.get_role(802745474742091826)
-    # bright = ctx.guild.get_role(802745469407199232)
-    # sunrise = ctx.guild.get_role(802745476490330122)
-    # clover = ctx.guild.get_role(802745467251195924)
-    # cloud = ctx.guild.get_role(802745472263389195)
-    # sunset = ctx.guild.get_role(802745470988058665)
-    # anonymous = ctx.guild.get_role(802744112821960724)
-    # embed = discord.Embed(title='<:down3:823376679463419935> Color Roles', description=f"{cozy.mention}{sunrise.mention}{bright.mention}{clover.mention}{cloud.mention}{sunset.mention}{anonymous.mention}", color=discord.Color(0xFEFDD1))
-    embed = discord.Embed(title='<:down3:823376679463419935> Color Roles', color=discord.Color(0xFEFDD1))
+    cozy = ctx.guild.get_role(802745474742091826)
+    bright = ctx.guild.get_role(802745469407199232)
+    sunrise = ctx.guild.get_role(802745476490330122)
+    clover = ctx.guild.get_role(802745467251195924)
+    cloud = ctx.guild.get_role(802745472263389195)
+    sunset = ctx.guild.get_role(802745470988058665)
+    anonymous = ctx.guild.get_role(802744112821960724)
+    embed = discord.Embed(title='<:down3:823376679463419935> Color Roles', description=f"{cozy.mention}{sunrise.mention}{bright.mention}{clover.mention}{cloud.mention}{sunset.mention}{anonymous.mention}", color=discord.Color(0xFEFDD1))
+    # embed = discord.Embed(title='<:down3:823376679463419935> Color Roles', color=discord.Color(0xFEFDD1))
     embed.set_image(url='https://i.pinimg.com/originals/51/45/23/5145235480824587a34264859401580e.gif')
     await ctx.send(embed=embed)
 
