@@ -74,9 +74,17 @@ async def pronouns(ctx):
 
 @client.command(help='DMs Embed')
 async def dms(ctx):
-    embed = discord.Embed(title='<:down2:823376679166541834> DMs Roles', description="```🔴: dm's open | 🟡: ask to dm | 🟢: dm's closed```", color=discord.Color(0x447352))
+    embed = discord.Embed(title='<:down2:823376679166541834> DMs Roles', description="```🟢: dm's open | 🟡: ask to dm | 🔴: dm's closed```", color=discord.Color(0x447352))
     embed.set_image(url='https://data.whicdn.com/images/305888882/original.gif')
     await ctx.send(embed=embed)
+
+''' Edit Messages
+@client.command(help='DMs Embed', pass_context=True)
+async def edit(ctx, msg : discord.Message):
+    embed = discord.Embed(title='<:down2:823376679166541834> DMs Roles', description="```🟢: dm's open | 🟡: ask to dm | 🔴: dm's closed```", color=discord.Color(0x447352))
+    embed.set_image(url='https://data.whicdn.com/images/305888882/original.gif')
+    await msg.edit(embed=embed)
+'''
 
 @client.command(help='Original Colors Embed')
 async def colors(ctx):
