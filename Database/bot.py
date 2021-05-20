@@ -14,8 +14,8 @@ guild = None
 atc = None
 log = None
 file_log = None
-count = {}
-time = {}
+# count = {}
+# time = {}
 
 @client.event
 async def on_ready():
@@ -132,7 +132,7 @@ async def reload_database():
             await db.send(file=discord.File(f'./Database/txt/{file}'))
             await file_log.send(file=discord.File(f'./Database/txt/{file}'))
 
-# Start Timer in Voice Channel
+''' Start Timer in Voice Channel
 async def timerStart(member):
     global log
     time[member.id] = 0
@@ -141,6 +141,7 @@ async def timerStart(member):
     while count[member.id] == True:
         await sleep(60)
         time[member.id] += 1
+'''
 
 @client.command(name='register', help='Registers a Member')
 @commands.has_permissions(administrator=True)
@@ -257,6 +258,7 @@ async def on_message(message):
     
     await client.process_commands(message)
 
+'''
 @client.event
 async def on_voice_state_update(member, before, after):
     global db, log
@@ -276,7 +278,7 @@ async def on_voice_state_update(member, before, after):
                 await timerStart(member)
     except AttributeError:
         pass
-
+'''
 # LOOP TO RELOAD FILE
 
 @tasks.loop(minutes=1.0)
