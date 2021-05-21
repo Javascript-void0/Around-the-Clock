@@ -1,7 +1,6 @@
 import discord
 import os
 import asyncio
-import time
 from discord.ext import tasks, commands
 from discord.utils import get
 
@@ -20,7 +19,7 @@ async def timer_start():
     guild = client.get_guild(802565984602423367)
     guild2 = client.get_guild(805299220935999509)
     channel = guild2.get_channel(838431117006340106)
-    member = guild.me
+    # member = guild.me
 
     shortBreak = False
     longBreak = False
@@ -70,12 +69,21 @@ async def timer_start():
                     await user.send('```Break Time over, time to study for 25 minutes!```')
 
         if longBreak == True:
-            await member.edit(nick='Long Break:')
+            await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='{:02}m {:02}s | .toggle'.format(m,s)))
+            await asyncio.sleep(2.5)
+            await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='{:02}m {:02}s | Long'.format(m,s)))
+            # await member.edit(nick='Long Break:')
         elif shortBreak == True:
-            await member.edit(nick='Short Break:')    
+            await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='{:02}m {:02}s | .toggle'.format(m,s)))
+            await asyncio.sleep(2.5)
+            await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='{:02}m {:02}s | Short'.format(m,s)))
+            # await member.edit(nick='Short Break:')    
         else:
-            await member.edit(nick='Time Left:')
-        await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='{:02}m {:02}s | .toggle'.format(m,s)))
+            await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='{:02}m {:02}s | .toggle'.format(m,s)))
+            await asyncio.sleep(2.5)
+            await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='{:02}m {:02}s | Study '.format(m,s)))
+            # member.edit(nick='Time Left:')
+        # await client.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name='{:02}m {:02}s | .toggle'.format(m,s)))
 
 @client.command(help='Tune into DM notifications')
 async def toggle(ctx):
