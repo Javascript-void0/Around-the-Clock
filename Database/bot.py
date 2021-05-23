@@ -29,7 +29,7 @@ async def on_ready():
     print(f'[ + ] Connected to database...')
     await log.send('```DATABASE: Started {0.user}```'.format(client))
     await log.send(f'```DATABASE: Connected to database...```')
-    await db_files()
+    await get_db_files()
 
 # Check is member is registered
 async def registered(member):
@@ -41,6 +41,8 @@ async def registered(member):
 # Adds register member
 async def register(member):
     global db, log
+    if db_empty:
+        await get_log_files()
     if not await registered(member) and not member.bot:
         file_num = 0
         for file in os.listdir('./Database/txt'):
@@ -63,7 +65,7 @@ async def register(member):
             return
             
 # Takes files from Database and saves to directory
-async def db_files():
+async def get_db_files():
     global db, log
     messages = await db.history(limit=None, oldest_first=True).flatten()
     if messages:
@@ -76,9 +78,26 @@ async def db_files():
             await log.send(f'```DATABASE: Saved {file_num}.txt to Directory```')
             file_num += 1
 
+# Takes recent file from file log and saves to directory
+async def get_log_files():
+    global file_log, log
+    message = await file_log.fetch_message(file_log.last_message_id)
+    file = await message.attachments[0].read()
+    with open(f'./Database/txt/1.txt', 'wb') as f:
+        f.write(file)
+        f.close()
+    await log.send(f'```DATABASE: Saved 1.txt to Directory```')
+
+async def db_empty():
+    for file in os.listdir('./Database/txt'):
+        return False
+    return True
+
 # Searches and Returns Player's Data
 async def find_dir_files(member):
     data = None
+    if db_empty:
+        await get_log_files()
     for file in os.listdir('./Database/txt'):
         f = open(f'./Database/txt/{file}', 'r').read()
         lines = f.splitlines()
@@ -94,6 +113,8 @@ async def find_dir_files(member):
 async def modify_data(member, action, num):
     global log
     data = None
+    if db_empty:
+        await get_log_files()
     for file in os.listdir('./Database/txt'):
         f = open(f'./Database/txt/{file}')
         f = f.read()
@@ -124,6 +145,8 @@ async def modify_data(member, action, num):
 
 # Deletes and replaces with Directory Files
 async def reload_database():
+    if db_empty:
+        await get_log_files()
     global db, file_log
     await db.purge(limit=None)
     messages = await db.history().flatten()
