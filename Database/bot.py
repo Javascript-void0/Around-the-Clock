@@ -41,8 +41,6 @@ async def registered(member):
 # Adds register member
 async def register(member):
     global db, log
-    if db_empty:
-        await get_log_files()
     if not await registered(member) and not member.bot:
         file_num = 0
         for file in os.listdir('./Database/txt'):
@@ -96,8 +94,6 @@ async def db_empty():
 # Searches and Returns Player's Data
 async def find_dir_files(member):
     data = None
-    if db_empty:
-        await get_log_files()
     for file in os.listdir('./Database/txt'):
         f = open(f'./Database/txt/{file}', 'r').read()
         lines = f.splitlines()
@@ -113,8 +109,6 @@ async def find_dir_files(member):
 async def modify_data(member, action, num):
     global log
     data = None
-    if db_empty:
-        await get_log_files()
     for file in os.listdir('./Database/txt'):
         f = open(f'./Database/txt/{file}')
         f = f.read()
@@ -304,6 +298,8 @@ async def on_voice_state_update(member, before, after):
 
 @tasks.loop(minutes=1.0)
 async def loop_restart():
+    if db_empty:
+        await get_log_files()
     await reload_database()
 
 @loop_restart.before_loop
