@@ -145,8 +145,6 @@ async def modify_data(member, action, num):
 
 # Deletes and replaces with Directory Files
 async def reload_database():
-    if db_empty:
-        await get_log_files()
     global db, file_log
     await db.purge(limit=None)
     messages = await db.history().flatten()
