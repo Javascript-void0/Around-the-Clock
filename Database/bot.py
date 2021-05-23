@@ -29,7 +29,7 @@ async def on_ready():
     print(f'[ + ] Connected to database...')
     await log.send('```DATABASE: Started {0.user}```'.format(client))
     await log.send(f'```DATABASE: Connected to database...```')
-    await get_db_files()
+    await get_log_files()
 
 # Check is member is registered
 async def registered(member):
