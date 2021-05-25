@@ -84,7 +84,7 @@ async def get_log_files():
     global file_log, log
     try:
         message = await file_log.fetch_message(file_log.last_message_id)
-    except DiscordServerError:
+    except:
         await loop_restart.start()
     file = await message.attachments[0].read()
     with open(f'./Database/txt/1.txt', 'wb') as f:
