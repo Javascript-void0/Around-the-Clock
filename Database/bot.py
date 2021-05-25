@@ -305,7 +305,7 @@ async def on_voice_state_update(member, before, after):
 
 @tasks.loop(minutes=1.0)
 async def loop_restart():
-    await log_update()
+    # await log_update()
     await get_log_files()
     await reload_database()
 
