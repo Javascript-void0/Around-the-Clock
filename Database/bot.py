@@ -87,6 +87,12 @@ async def get_log_files():
         f.close()
     await log.send(f'```DATABASE: Saved 1.txt to Directory```')
 
+# Current Directory into Log
+async def log_update():
+    global file_log, log
+    for file in os.listdir('./Database/txt'):
+        await file_log.send(file=discord.File(f'./Database/txt/{file}'))
+
 async def db_empty():
     for file in os.listdir('./Database/txt'):
         return False
@@ -299,6 +305,7 @@ async def on_voice_state_update(member, before, after):
 
 @tasks.loop(minutes=1.0)
 async def loop_restart():
+    await log_update()
     await get_log_files()
     await reload_database()
 
