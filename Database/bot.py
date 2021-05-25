@@ -44,6 +44,17 @@ async def registered(member):
 async def register(member):
     global db, log
     if not await registered(member) and not member.bot:
+        f = open('./Database/data.txt')
+        f = f.read()
+        lines = f.splitlines(True)
+        lines.append(f'{member.id}: 1\n')
+        with open(f'./Database/data.txt', 'w') as file:
+            file.writelines(lines)
+            file.close()
+            await log.send(f'```DATABASE: Registered {member}```')
+            return
+
+'''
         file_num = 0
         for file in os.listdir('./Database/txt'):
             file_num += 1
@@ -63,7 +74,8 @@ async def register(member):
             file.close()
             await log.send(f'```DATABASE: Registered {member}```')
             return
-            
+'''
+
 # Takes files from Database and saves to directory
 async def get_db_files():
     global db, log
@@ -72,7 +84,7 @@ async def get_db_files():
         file_num = 1
         for msg in messages:
             file = await msg.attachments[0].read()
-            with open(f'./Database/txt/{file_num}.txt', 'wb') as f:
+            with open(f'./Database/data.txt', 'wb') as f:
                 f.write(file)
                 f.close()
             await log.send(f'```DATABASE: Saved {file_num}.txt to Directory```')
@@ -86,7 +98,7 @@ async def get_log_files():
     except:
         await loop_restart.start()
     file = await message.attachments[0].read()
-    with open(f'./Database/txt/1.txt', 'wb') as f:
+    with open(f'./Database/data.txt', 'wb') as f:
         f.write(file)
         f.close()
     await log.send(f'```DATABASE: Saved 1.txt to Directory```')
@@ -94,25 +106,30 @@ async def get_log_files():
 # Current Directory into Log
 async def log_update():
     global file_log, log
-    for file in os.listdir('./Database/txt'):
-        await file_log.send(file=discord.File(f'./Database/txt/{file}'))
+    await file_log.send(file=discord.File(f'./Database/data.txt'))
 
+'''
 async def db_empty():
-    for file in os.listdir('./Database/txt'):
+    try:
+        open(./Database/data.txt')
         return False
-    return True
+    except:
+        return True
+    else:
+        return False
+'''
 
 # Searches and Returns Player's Data
 async def find_dir_files(member):
     data = None
-    for file in os.listdir('./Database/txt'):
-        f = open(f'./Database/txt/{file}', 'r').read()
-        lines = f.splitlines()
-        for i in range(len(lines)):
-            if str(member.id) in lines[i]:
-                data = lines[i][20:]
-                return data
-                break
+    # for file in os.listdir('./Database/txt'):
+    f = open(f'./Database/data.txt', 'r').read()
+    lines = f.splitlines()
+    for i in range(len(lines)):
+        if str(member.id) in lines[i]:
+            data = lines[i][20:]
+            return data
+    #         break
     if not data:
         return False
 
@@ -120,31 +137,31 @@ async def find_dir_files(member):
 async def modify_data(member, action, num):
     global log
     data = None
-    for file in os.listdir('./Database/txt'):
-        f = open(f'./Database/txt/{file}')
-        f = f.read()
-        lines = f.splitlines(True)
-        for i in range(len(lines)):
-            if str(member.id) in lines[i]:
-                data = lines[i][20:]
-                if action == 'add':
-                    x = int(data) + num
-                    await log.send(f'```DATABASE: Added {num} to {member}```')
-                elif action == 'remove':
-                    x = int(data) - num
-                    await log.send(f'```DATABASE: Removed {num} from {member}```')
-                elif action == 'reset':
-                    x = 0
-                    await log.send(f'```DATABASE: Reset{member} to 0```')
-                elif action == 'set':
-                    x = num
-                    await log.send(f'```DATABASE: Set {member} to {num}```')
-                if x < 0:
-                    x = 0
-                lines[i] = f'{member.id}: {x}\n'
-                with open(f'./Database/txt/{file}', 'w') as file:
-                    file.writelines(lines)
-                break
+    # for file in os.listdir('./Database/txt'):
+    f = open(f'./Database/data.txt')
+    f = f.read()
+    lines = f.splitlines(True)
+    for i in range(len(lines)):
+        if str(member.id) in lines[i]:
+            data = lines[i][20:]
+            if action == 'add':
+                x = int(data) + num
+                await log.send(f'```DATABASE: Added {num} to {member}```')
+            elif action == 'remove':
+                x = int(data) - num
+                await log.send(f'```DATABASE: Removed {num} from {member}```')
+            elif action == 'reset':
+                x = 0
+                await log.send(f'```DATABASE: Reset{member} to 0```')
+            elif action == 'set':
+                x = num
+                await log.send(f'```DATABASE: Set {member} to {num}```')
+            if x < 0:
+                x = 0
+            lines[i] = f'{member.id}: {x}\n'
+            with open(f'./Database/data.txt', 'w') as file:
+                file.writelines(lines)
+    #         break
     if not data:
         return False
 
@@ -154,9 +171,9 @@ async def reload_database():
     await db.purge(limit=None)
     messages = await db.history().flatten()
     if messages == []:
-        for file in os.listdir('./Database/txt'):
-            await db.send(file=discord.File(f'./Database/txt/{file}'))
-            await file_log.send(file=discord.File(f'./Database/txt/{file}'))
+    #     for file in os.listdir('./Database/txt'):
+        await db.send(file=discord.File(f'./Database/data.txt'))
+        await file_log.send(file=discord.File(f'./Database/data.txt'))
 
 ''' Start Timer in Voice Channel
 async def timerStart(member):
@@ -230,9 +247,9 @@ async def databaseload(ctx):
     global db
     messages = await db.history().flatten()
     if messages == []:
-        for file in os.listdir('./Database/txt'):
-            await db.send(file=discord.File(f'./Database/txt/{file}'))
-            await log.send('```DATABASE: Loaded```', file=discord.File(f'./Database/txt/{file}'))
+    #     for file in os.listdir('./Database/txt'):
+        await db.send(file=discord.File(f'./Database/data.txt'))
+        await log.send('```DATABASE: Loaded```', file=discord.File(f'./Database/data.txt'))
     await ctx.send('```DATABASE: Loaded```')
 
 @client.command(aliases=['dbclean', 'databaseclean', 'cleandatabase'], help='Cleans extra data')
@@ -240,23 +257,23 @@ async def databaseload(ctx):
 async def cleandb(ctx):
     global db
     if ctx.guild == atc:
-        for file in os.listdir('./Database/txt'):
-            f = open(f'./Database/txt/{file}')
-            f = f.read()
-            lines = f.splitlines(True)
-            for i in range(len(lines)-1, -1, -1):
-                if ': 0\n' in lines[i]:
-                    lines.pop(i)
-            with open(f'./Database/txt/{file}', 'w') as file:
-                file.writelines(lines)
-                file.close()
+    #     for file in os.listdir('./Database/txt'):
+        f = open(f'./Database/data.txt')
+        f = f.read()
+        lines = f.splitlines(True)
+        for i in range(len(lines)-1, -1, -1):
+            if ': 0\n' in lines[i]:
+                lines.pop(i)
+        with open(f'./Database/data.txt', 'w') as file:
+            file.writelines(lines)
+            file.close()
         await ctx.send('```DATABASE: Cleaned```')
         await log.send('```DATABASE: Cleaned```')
 
 @client.command(help='Send Database File')
 async def file(ctx):
-    for file in os.listdir('./Database/txt'):
-        await ctx.send(file=discord.File(f'./Database/txt/{file}'))
+    # for file in os.listdir('./Database/txt'):
+    await ctx.send(file=discord.File(f'./Database/data.txt'))
 
 # EVENTS TO ADD SCORE
 
