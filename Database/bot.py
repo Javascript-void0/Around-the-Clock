@@ -22,7 +22,8 @@ async def on_ready():
     global db, guild, atc, log, file_log
     guild = client.get_guild(805299220935999509)
     atc = client.get_guild(802565984602423367)
-    db = guild.get_channel(834943847602978836)
+    db = atc.get_channel(846564411862548490)
+    # db = guild.get_channel(834943847602978836)
     log = guild.get_channel(838612591277375518)
     file_log = guild.get_channel(839164203449188372)
     print('[ + ] Started {0.user}'.format(client))
