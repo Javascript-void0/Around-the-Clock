@@ -337,4 +337,4 @@ async def before_loop_restart():
 
 loop_restart.start()
 if __name__ == '__main__':
-    client.run(TOKEN)
+    client.run(TOKEN, reconnect=True)
