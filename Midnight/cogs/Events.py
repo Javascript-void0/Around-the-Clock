@@ -26,7 +26,7 @@ class Events(commands.Cog):
         embed.set_footer(text="Enjoy Your Stay {}".format(member.name), icon_url = "https://media.tenor.com/images/dae19cf6b07682c4acf67dfc880f11f5/tenor.gif")
         await channel.send(member.mention, embed=embed)
 
-        members = guild.get_channel(802737096640036924)
+        members = guild.get_channel(847667870098784296)
         count = 0
         for member in guild.members:
             if not member.bot:
@@ -37,7 +37,7 @@ class Events(commands.Cog):
     async def on_member_remove(self, member):
         print(f'{member} has left the server.')
         guild = self.client.get_guild(802565984602423367)
-        members = guild.get_channel(802737096640036924)
+        members = guild.get_channel(847667870098784296)
         count = 0
         for member in guild.members:
             if not member.bot:
