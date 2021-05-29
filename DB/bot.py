@@ -95,9 +95,9 @@ async def get_db_files():
 
 # Takes recent file from file log and saves to directory
 async def get_log_files():
-    global file_log, log
+    global file_log, log, guild
     try:
-        message = await file_log.fetch_message(file_log.last_message_id)
+        message = await guild.get_channel(file_log).history(limit=1).flatten()
     except:
         await loop_restart.start()
     file = await message.attachments[0].read()
