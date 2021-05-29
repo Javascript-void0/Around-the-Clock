@@ -233,6 +233,21 @@ async def find(ctx, member : discord.Member):
     else:
         await ctx.send(f'```DATABASE: No data for {member}```')
 
+@client.command(aliases=['self'], help='Shows Your Stats')
+async def me(ctx):
+    global db
+    member = ctx.message.author
+    data = await find_dir_files(member)
+    if data:
+        await ctx.send(f'```[{member.id}]\n{member} - {data}```')
+    else:
+        await ctx.send(f'```DATABASE: No data for {member}```')
+
+@client.command(help='Shows Top Members')
+async def top(ctx):
+    global db
+    pass
+
 @client.command(aliases=['dbclear', 'cleardatabase', 'cleardb', 'clear_database', 'clear_db'], help='Clears the Database')
 @commands.has_permissions(administrator=True)
 async def databaseclear(ctx):
