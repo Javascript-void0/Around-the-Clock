@@ -18,6 +18,9 @@ file_log = None
 # count = {}
 # time = {}
 
+# Todo
+# - Top
+
 @client.event
 async def on_ready():
     global db, guild, atc, log, file_log
@@ -108,16 +111,12 @@ async def log_update():
     global file_log, log
     await file_log.send(file=discord.File(f'./Database/data.txt'))
 
-'''
 async def db_empty():
     try:
-        open(./Database/data.txt')
+        open('./Database/data.txt')
         return False
     except:
         return True
-    else:
-        return False
-'''
 
 # Searches and Returns Player's Data
 async def find_dir_files(member):
@@ -326,8 +325,10 @@ async def on_voice_state_update(member, before, after):
 
 @tasks.loop(minutes=1.0)
 async def loop_restart():
-    await log_update()
-    await get_log_files()
+    if await db_empty:
+        await get_log_files()
+    else:
+        await log_update()
     await reload_database()
 
 @loop_restart.before_loop
