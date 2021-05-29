@@ -1,7 +1,7 @@
 import discord
 import os
 from asyncio import sleep
-from discord.errors import DiscordServerError
+from discord.errors import DiscordServerError, NotFound
 from discord.ext import commands, tasks
 from discord.utils import get
 
@@ -34,7 +34,6 @@ async def on_ready():
     print(f'[ + ] Connected to database...')
     await log.send('```DATABASE: Started {0.user}```'.format(client))
     await log.send(f'```DATABASE: Connected to database...```')
-    await get_log_files()
 
 # Check is member is registered
 async def registered(member):
@@ -96,7 +95,10 @@ async def get_db_files():
 # Takes recent file from file log and saves to directory
 async def get_log_files():
     global file_log, log
-    message = await file_log.fetch_message(file_log.last_message_id)
+    try:
+        message = await file_log.fetch_message(file_log.last_message_id)
+    except NotFound:
+        await log.send('```DATABASE: Unknown Message```')
     file = await message.attachments[0].read()
     with open(f'./DB/data.txt', 'wb') as f:
         f.write(file)
