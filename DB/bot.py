@@ -104,7 +104,6 @@ async def get_log_files():
     with open(f'./DB/data.txt', 'wb') as f:
         f.write(file)
         f.close()
-    await log.send(f'```DATABASE: Saved 1.txt to Directory```')
 
 # Current Directory into Log
 async def log_update():
@@ -342,8 +341,10 @@ async def on_voice_state_update(member, before, after):
 async def loop_restart():
     if db_empty:
         await get_log_files()
+        await log_update()
     else:
         await log_update()
+        await get_log_files()
     await reload_database()
 
 @loop_restart.before_loop
