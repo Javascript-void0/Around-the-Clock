@@ -340,7 +340,6 @@ async def on_voice_state_update(member, before, after):
 async def loop_restart():
     if db_empty:
         await get_log_files()
-        await log_update()
     else:
         await log_update()
         await get_log_files()
