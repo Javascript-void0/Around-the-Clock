@@ -47,11 +47,11 @@ async def registered(member):
 async def register(member):
     global db, log
     if not await registered(member) and not member.bot:
-        f = open('./Database/data.txt')
+        f = open('./DB/data.txt')
         f = f.read()
         lines = f.splitlines(True)
         lines.append(f'{member.id}: 1\n')
-        with open(f'./Database/data.txt', 'w') as file:
+        with open(f'./DB/data.txt', 'w') as file:
             file.writelines(lines)
             file.close()
             await log.send(f'```DATABASE: Registered {member}```')
@@ -59,20 +59,20 @@ async def register(member):
 
 '''
         file_num = 0
-        for file in os.listdir('./Database/txt'):
+        for file in os.listdir('./DB/txt'):
             file_num += 1
-            if os.stat(f'./Database/txt/{file}').st_size <= 7800000:
-                f = open(f'./Database/txt/{file}')
+            if os.stat(f'./DB/txt/{file}').st_size <= 7800000:
+                f = open(f'./DB/txt/{file}')
                 f = f.read()
                 lines = f.splitlines(True)
                 lines.append(f'{member.id}: 1\n')
-                with open(f'./Database/txt/{file}', 'w') as file:
+                with open(f'./DB/txt/{file}', 'w') as file:
                     file.writelines(lines)
                     file.close()
                     await log.send(f'```DATABASE: Registered {member}```')
                     return
         file_num += 1
-        with open(f'./Database/txt/2.txt', 'w') as file:
+        with open(f'./DB/txt/2.txt', 'w') as file:
             file.write(f'{member.id}: 1\n')
             file.close()
             await log.send(f'```DATABASE: Registered {member}```')
@@ -87,7 +87,7 @@ async def get_db_files():
         file_num = 1
         for msg in messages:
             file = await msg.attachments[0].read()
-            with open(f'./Database/data.txt', 'wb') as f:
+            with open(f'./DB/data.txt', 'wb') as f:
                 f.write(file)
                 f.close()
             await log.send(f'```DATABASE: Saved {file_num}.txt to Directory```')
@@ -101,7 +101,7 @@ async def get_log_files():
     except:
         await loop_restart.start()
     file = await message.attachments[0].read()
-    with open(f'./Database/data.txt', 'wb') as f:
+    with open(f'./DB/data.txt', 'wb') as f:
         f.write(file)
         f.close()
     await log.send(f'```DATABASE: Saved 1.txt to Directory```')
@@ -109,11 +109,11 @@ async def get_log_files():
 # Current Directory into Log
 async def log_update():
     global file_log, log
-    await file_log.send(file=discord.File(f'./Database/data.txt'))
+    await file_log.send(file=discord.File(f'./DB/data.txt'))
 
 async def db_empty():
     try:
-        open('./Database/data.txt')
+        open('./DB/data.txt')
         return False
     except:
         return True
@@ -121,8 +121,8 @@ async def db_empty():
 # Searches and Returns Player's Data
 async def find_dir_files(member):
     data = None
-    # for file in os.listdir('./Database/txt'):
-    f = open(f'./Database/data.txt', 'r').read()
+    # for file in os.listdir('./DB/txt'):
+    f = open(f'./DB/data.txt', 'r').read()
     lines = f.splitlines()
     for i in range(len(lines)):
         if str(member.id) in lines[i]:
@@ -136,8 +136,8 @@ async def find_dir_files(member):
 async def modify_data(member, action, num):
     global log
     data = None
-    # for file in os.listdir('./Database/txt'):
-    f = open(f'./Database/data.txt')
+    # for file in os.listdir('./DB/txt'):
+    f = open(f'./DB/data.txt')
     f = f.read()
     lines = f.splitlines(True)
     for i in range(len(lines)):
@@ -158,7 +158,7 @@ async def modify_data(member, action, num):
             if x < 0:
                 x = 0
             lines[i] = f'{member.id}: {x}\n'
-            with open(f'./Database/data.txt', 'w') as file:
+            with open(f'./DB/data.txt', 'w') as file:
                 file.writelines(lines)
     #         break
     if not data:
@@ -170,9 +170,9 @@ async def reload_database():
     await db.purge(limit=None)
     messages = await db.history().flatten()
     if messages == []:
-    #     for file in os.listdir('./Database/txt'):
-        await db.send(file=discord.File(f'./Database/data.txt'))
-        await file_log.send(file=discord.File(f'./Database/data.txt'))
+    #     for file in os.listdir('./DB/txt'):
+        await db.send(file=discord.File(f'./DB/data.txt'))
+        await file_log.send(file=discord.File(f'./DB/data.txt'))
 
 ''' Start Timer in Voice Channel
 async def timerStart(member):
@@ -246,9 +246,9 @@ async def databaseload(ctx):
     global db
     messages = await db.history().flatten()
     if messages == []:
-    #     for file in os.listdir('./Database/txt'):
-        await db.send(file=discord.File(f'./Database/data.txt'))
-        await log.send('```DATABASE: Loaded```', file=discord.File(f'./Database/data.txt'))
+    #     for file in os.listdir('./DB/txt'):
+        await db.send(file=discord.File(f'./DB/data.txt'))
+        await log.send('```DATABASE: Loaded```', file=discord.File(f'./DB/data.txt'))
     await ctx.send('```DATABASE: Loaded```')
 
 @client.command(aliases=['dbclean', 'databaseclean', 'cleandatabase'], help='Cleans extra data')
@@ -256,14 +256,14 @@ async def databaseload(ctx):
 async def cleandb(ctx):
     global db
     if ctx.guild == atc:
-    #     for file in os.listdir('./Database/txt'):
-        f = open(f'./Database/data.txt')
+    #     for file in os.listdir('./DB/txt'):
+        f = open(f'./DB/data.txt')
         f = f.read()
         lines = f.splitlines(True)
         for i in range(len(lines)-1, -1, -1):
             if ': 0\n' in lines[i]:
                 lines.pop(i)
-        with open(f'./Database/data.txt', 'w') as file:
+        with open(f'./DB/data.txt', 'w') as file:
             file.writelines(lines)
             file.close()
         await ctx.send('```DATABASE: Cleaned```')
@@ -271,8 +271,8 @@ async def cleandb(ctx):
 
 @client.command(help='Send Database File')
 async def file(ctx):
-    # for file in os.listdir('./Database/txt'):
-    await ctx.send(file=discord.File(f'./Database/data.txt'))
+    # for file in os.listdir('./DB/txt'):
+    await ctx.send(file=discord.File(f'./DB/data.txt'))
 
 # EVENTS TO ADD SCORE
 
