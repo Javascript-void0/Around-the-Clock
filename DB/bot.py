@@ -1,5 +1,5 @@
 import discord
-import os
+import os, os.path
 from asyncio import sleep
 from discord.errors import DiscordServerError, NotFound
 from discord.ext import commands, tasks
@@ -110,11 +110,9 @@ async def log_update():
     await file_log.send(file=discord.File(f'./DB/data.txt'))
 
 async def db_empty():
-    try:
-        open('./DB/data.txt')
+    if os.path.exists('./DB/data.txt'):
         return False
-    except:
-        return True
+    return True
 
 # Searches and Returns Player's Data
 async def find_dir_files(member):
@@ -338,11 +336,13 @@ async def on_voice_state_update(member, before, after):
 
 @tasks.loop(minutes=1.0)
 async def loop_restart():
-    if db_empty:
+    if await db_empty():
         await get_log_files()
+        print('e')
     else:
         await log_update()
         await get_log_files()
+        print('r')
     await reload_database()
 
 @loop_restart.before_loop
