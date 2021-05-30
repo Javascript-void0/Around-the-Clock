@@ -178,6 +178,34 @@ async def reload_database():
     #     for file in os.listdir('./DB/txt'):
         await db.send(file=discord.File(f'./DB/data.txt'))
 
+async def rank(member):
+    global log, atc
+    data = int(await find_dir_files(member))
+    _3 = atc.get_role(846831774968840263)
+    _6 = atc.get_role(846831824839245905)
+    _9 = atc.get_role(846831895983292488)
+    _12 = atc.get_role(846831994607632414)
+    if data > 500 and _3 not in member.roles:
+        await member.add_roles(_3)
+        await log.send(f'```DATABASE: {member} Rank 3```')
+    elif data < 500 and _3 in member.roles:
+        await member.remove_roles(_3)
+    if data > 1500 and _6 not in member.roles:
+        await member.add_roles(_6)
+        await log.send(f'```DATABASE: {member} Rank 6```')
+    elif data < 1500 and _6 in member.roles:
+        await member.remove_roles(_6)
+    if data > 5000 and _9 not in member.roles:
+        await member.add_roles(_9)
+        await log.send(f'```DATABASE: {member} Rank 9```')
+    elif data < 5000 and _9 in member.roles:
+        await member.remove_roles(_9)
+    if data > 10000 and _12 not in member.roles:
+        await member.add_roles(_12)
+        await log.send(f'```DATABASE: {member} Rank 12```')
+    elif data < 10000 and _12 in member.roles:
+        await member.remove_roles(_12)
+
 ''' Start Timer in Voice Channel
 async def timerStart(member):
     global log
@@ -323,9 +351,9 @@ async def on_message(message):
     global atc
     if message.guild == atc and not message.author.bot:
         if await registered(message.author):
-            if message.channel.id == 805491870183981116 and len(str(message.content)) >= 25: # intros
+            if message.channel.id == 805491870183981116 and len(str(message.content)) >= 50: # intros
                 await modify_data(message.author, "add", 25)
-            elif message.channel.id == 806150413773963275: # todo
+            elif message.channel.id == 806150413773963275 and len(str(message.conent)) > 50: # todo
                 await modify_data(message.author, "add", 10)
             elif message.channel.id == 802577298267963412 and message.content == '!d bump':
                 await modify_data(message.author, "add", 5)
@@ -337,6 +365,7 @@ async def on_message(message):
                 await modify_data(message.author, "add", 3)
             else:
                 await modify_data(message.author, "add", 1)
+            await rank(message.author)
         else:
             await register(message.author)
     
