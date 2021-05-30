@@ -44,7 +44,7 @@ async def registered(member):
 
 # Adds register member
 async def register(member):
-    global db, log
+    global log
     if not await registered(member) and not member.bot:
         f = open('./DB/data.txt')
         f = f.read()
@@ -54,7 +54,17 @@ async def register(member):
             file.writelines(lines)
             file.close()
             await log.send(f'```DATABASE: Registered {member}```')
-            return
+
+async def unregister(member):
+    global log
+    f = open(f'./DB/data.txt').read()
+    lines = f.splitlines(True)
+    with open(f'./DB/data.txt', 'w') as file:
+        for i in range(len(lines)):
+            if str(member.id) not in lines[i]:
+                file.write(lines[i])
+    await log.send(f'```DATABASE: Unregistered {member}```')
+
 
 '''
         file_num = 0
@@ -184,6 +194,12 @@ async def timerStart(member):
 async def _register(ctx, member : discord.Member):
     await register(member)
     await ctx.send(f'```DATABASE: Registered {member}```')
+
+@client.command(name='unregister', help='Unregisters a Member')
+@commands.has_permissions(administrator=True)
+async def _unregister(ctx, member : discord.Member):
+    await unregister(member)
+    await ctx.send(f'```DATABASE: Unregistered {member}```')
 
 @client.command(help='Add')
 @commands.has_permissions(administrator=True)
