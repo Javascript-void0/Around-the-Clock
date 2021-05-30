@@ -133,8 +133,7 @@ async def modify_data(member, action, num):
     global log
     data = None
     # for file in os.listdir('./DB/txt'):
-    f = open(f'./DB/data.txt')
-    f = f.read()
+    f = open(f'./DB/data.txt').read()
     lines = f.splitlines(True)
     for i in range(len(lines)):
         if str(member.id) in lines[i]:
@@ -239,10 +238,22 @@ async def me(ctx):
     else:
         await ctx.send(f'```DATABASE: No data for {member}```')
 
-@client.command(help='Shows Top Members')
+@client.command(aliases=['leaderboard', 'lb'], help='Shows Top Members')
 async def top(ctx):
-    global db
-    pass
+    data = {}
+    f = open(f'./DB/data.txt').read()
+    lines = f.splitlines()
+    lines = lines[2:]
+    for i in range(len(lines)):
+        member = lines[i].split(': ')
+        data[member[0]] = int(member[1])
+    top = sorted(data, key=data.get, reverse=True)[:10]
+    list = 'Top: \n'
+    for i in range(len(top)):
+        member = await client.fetch_user(int(top[i]))
+        data = await find_dir_files(member)
+        list = list + (f'{member}: {data}\n')
+    await ctx.send(f'```{list}```')
 
 @client.command(aliases=['dbclear', 'cleardatabase', 'cleardb', 'clear_database', 'clear_db'], help='Clears the Database')
 @commands.has_permissions(administrator=True)
@@ -338,11 +349,9 @@ async def on_voice_state_update(member, before, after):
 async def loop_restart():
     if await db_empty():
         await get_log_files()
-        print('e')
     else:
         await log_update()
         await get_log_files()
-        print('r')
     await reload_database()
 
 @loop_restart.before_loop
