@@ -248,11 +248,16 @@ async def top(ctx):
         member = lines[i].split(': ')
         data[member[0]] = int(member[1])
     top = sorted(data, key=data.get, reverse=True)[:10]
-    list = 'Top: \n'
+    list = 'Top: '
     for i in range(len(top)):
         member = await client.fetch_user(int(top[i]))
         data = await find_dir_files(member)
-        list = list + (f'{member}: {data}\n')
+        if i == 0:
+            list = list + (f'1. {member}: {data}\n')
+        elif i == 9:
+            list = list + (f'    10. {member}: {data}\n')
+        else:
+            list = list + (f'     {i+1}. {member}: {data}\n')
     await ctx.send(f'```{list}```')
 
 @client.command(aliases=['dbclear', 'cleardatabase', 'cleardb', 'clear_database', 'clear_db'], help='Clears the Database')
