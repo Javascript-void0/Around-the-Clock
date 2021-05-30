@@ -167,7 +167,6 @@ async def reload_database():
     if messages == []:
     #     for file in os.listdir('./DB/txt'):
         await db.send(file=discord.File(f'./DB/data.txt'))
-        await file_log.send(file=discord.File(f'./DB/data.txt'))
 
 ''' Start Timer in Voice Channel
 async def timerStart(member):
