@@ -56,7 +56,7 @@ optionsClear = [
 
 @slash.slash(name='clear', description='Clears Messages', guild_ids=guild_ids, options=optionsClear)
 async def clear(ctx : SlashContext, integer):
-    await ctx.channel.purge(limit=integer+1)
+    await ctx.channel.purge(limit=integer)
     await ctx.send(f'```Cleared {integer} messages```', delete_after=5)
 
 optionsWhois = [
