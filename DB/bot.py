@@ -152,7 +152,7 @@ async def reload_database():
     #     for file in os.listdir('./DB/txt'):
         await db.send(file=discord.File(f'./DB/data.txt'))
 
-async def rank(member):
+async def rankup(member):
     global log, atc
     data = int(await get_data(member))
     _3 = atc.get_role(846831774968840263)
@@ -339,7 +339,7 @@ async def on_message(message):
                 await modify_data(message.author, "add", 3)
             else:
                 await modify_data(message.author, "add", 1)
-            await rank(message.author)
+            await rankup(message.author)
         else:
             await register(message.author)
     
