@@ -18,9 +18,6 @@ file_log = None
 # count = {}
 # time = {}
 
-# Todo
-# - Top
-
 @client.event
 async def on_ready():
     global db, guild, atc, log, file_log
@@ -64,29 +61,6 @@ async def unregister(member):
             if str(member.id) not in lines[i]:
                 file.write(lines[i])
     await log.send(f'```DATABASE: Unregistered {member}```')
-
-
-'''
-        file_num = 0
-        for file in os.listdir('./DB/txt'):
-            file_num += 1
-            if os.stat(f'./DB/txt/{file}').st_size <= 7800000:
-                f = open(f'./DB/txt/{file}')
-                f = f.read()
-                lines = f.splitlines(True)
-                lines.append(f'{member.id}: 1\n')
-                with open(f'./DB/txt/{file}', 'w') as file:
-                    file.writelines(lines)
-                    file.close()
-                    await log.send(f'```DATABASE: Registered {member}```')
-                    return
-        file_num += 1
-        with open(f'./DB/txt/2.txt', 'w') as file:
-            file.write(f'{member.id}: 1\n')
-            file.close()
-            await log.send(f'```DATABASE: Registered {member}```')
-            return
-'''
 
 # Takes files from Database and saves to directory
 async def get_db_files():
