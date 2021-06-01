@@ -34,7 +34,7 @@ async def on_ready():
 
 # Check is member is registered
 async def registered(member):
-    data = await find_dir_files(member)
+    data = await get_data(member)
     if data:
         return True
     return False
@@ -99,7 +99,7 @@ async def db_empty():
     return True
 
 # Searches and Returns Player's Data
-async def find_dir_files(member):
+async def get_data(member):
     data = None
     # for file in os.listdir('./DB/txt'):
     f = open(f'./DB/data.txt', 'r').read()
@@ -154,7 +154,7 @@ async def reload_database():
 
 async def rank(member):
     global log, atc
-    data = int(await find_dir_files(member))
+    data = int(await get_data(member))
     _3 = atc.get_role(846831774968840263)
     _6 = atc.get_role(846831824839245905)
     _9 = atc.get_role(846831895983292488)
@@ -239,7 +239,7 @@ async def set(ctx, member : discord.Member, num : int):
 @client.command(aliases=['data', 'search', 'stat', 'stats'], help='Find Data')
 async def find(ctx, member : discord.Member):
     global db
-    data = await find_dir_files(member)
+    data = await get_data(member)
     if data:
         await ctx.send(f'```[{member.id}]\n{member} - {data}```')
     else:
@@ -249,7 +249,7 @@ async def find(ctx, member : discord.Member):
 async def me(ctx):
     global db
     member = ctx.message.author
-    data = await find_dir_files(member)
+    data = await get_data(member)
     if data:
         await ctx.send(f'```[{member.id}]\n{member} - {data}```')
     else:
@@ -268,7 +268,7 @@ async def top(ctx):
     list = 'Top: '
     for i in range(len(top)):
         member = await client.fetch_user(int(top[i]))
-        data = await find_dir_files(member)
+        data = await get_data(member)
         if i == 0:
             list = list + (f'1. {member}: {data}\n')
         elif i == 9:
