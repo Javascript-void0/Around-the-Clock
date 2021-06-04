@@ -159,25 +159,25 @@ async def rankup(member):
     _6 = atc.get_role(846831824839245905)
     _9 = atc.get_role(846831895983292488)
     _12 = atc.get_role(846831994607632414)
-    if data > 500 and _3 not in member.roles:
+    if data > 100 and _3 not in member.roles:
         await member.add_roles(_3)
         await log.send(f'```DATABASE: {member} Rank 3```')
-    elif data < 500 and _3 in member.roles:
+    elif data < 100 and _3 in member.roles:
         await member.remove_roles(_3)
-    if data > 1500 and _6 not in member.roles:
+    if data > 500 and _6 not in member.roles:
         await member.add_roles(_6)
         await log.send(f'```DATABASE: {member} Rank 6```')
-    elif data < 1500 and _6 in member.roles:
+    elif data < 500 and _6 in member.roles:
         await member.remove_roles(_6)
-    if data > 5000 and _9 not in member.roles:
+    if data > 1500 and _9 not in member.roles:
         await member.add_roles(_9)
         await log.send(f'```DATABASE: {member} Rank 9```')
-    elif data < 5000 and _9 in member.roles:
+    elif data < 1500 and _9 in member.roles:
         await member.remove_roles(_9)
-    if data > 10000 and _12 not in member.roles:
+    if data > 5000 and _12 not in member.roles:
         await member.add_roles(_12)
         await log.send(f'```DATABASE: {member} Rank 12```')
-    elif data < 10000 and _12 in member.roles:
+    elif data < 5000 and _12 in member.roles:
         await member.remove_roles(_12)
 
 ''' Start Timer in Voice Channel
