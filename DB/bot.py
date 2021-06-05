@@ -256,7 +256,13 @@ async def me(ctx):
         await ctx.send(f'```DATABASE: No data for {member}```')
 
 @client.command(aliases=['leaderboard', 'lb'], help='Shows Top Members')
-async def top(ctx):
+async def top(ctx, n : int = None):
+    if not n:
+        n = 10
+    if not n >= 3:
+        n = 3
+    if not n <= 25:
+        n = 25
     data = {}
     f = open(f'./DB/data.txt').read()
     lines = f.splitlines()
@@ -264,15 +270,15 @@ async def top(ctx):
     for i in range(len(lines)):
         member = lines[i].split(': ')
         data[member[0]] = int(member[1])
-    top = sorted(data, key=data.get, reverse=True)[:10]
+    top = sorted(data, key=data.get, reverse=True)[:n]
     list = 'Top: '
     for i in range(len(top)):
         member = await client.fetch_user(int(top[i]))
         data = await get_data(member)
         if i == 0:
             list = list + (f'1. {member}: {data}\n')
-        elif i == 9:
-            list = list + (f'    10. {member}: {data}\n')
+        elif i > 8:
+            list = list + (f'    {i+1}. {member}: {data}\n')
         else:
             list = list + (f'     {i+1}. {member}: {data}\n')
     await ctx.send(f'```{list}```')
