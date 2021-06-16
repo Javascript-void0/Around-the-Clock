@@ -333,7 +333,7 @@ async def on_message(message):
         if await registered(message.author):
             if message.channel.id == 805491870183981116 and len(str(message.content)) >= 50: # intros
                 await modify_data(message.author, "add", 25)
-            elif message.channel.id == 806150413773963275 and len(str(message.conent)) > 50: # todo
+            elif message.channel.id == 806150413773963275 and len(str(message.content)) > 50: # todo
                 await modify_data(message.author, "add", 10)
             elif message.channel.id == 802577298267963412 and message.content == '!d bump':
                 await modify_data(message.author, "add", 5)
