@@ -283,6 +283,15 @@ async def top(ctx, n : int = None):
             list = list + (f'     {i+1}. {member}: {data}\n')
     await ctx.send(f'```{list}```')
 
+@client.command(name='info', help='Returns the Server Info')
+async def info(ctx):
+    f = open(f'./DB/data.txt').read()
+    lines = f.splitlines()
+    total = 0
+    for i in range(len(lines)-2):
+        total += int(lines[i+2][20:])
+    await ctx.send(f'```Registered Users: {len(lines) - 2}\nServer Total: {total}```')
+
 @client.command(aliases=['dbclear', 'cleardatabase', 'cleardb', 'clear_database', 'clear_db'], help='Clears the Database')
 @commands.has_permissions(administrator=True)
 async def databaseclear(ctx):
