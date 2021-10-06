@@ -13,28 +13,28 @@ class Study(commands.Cog):
         self.client = client
 #        self.globalvc.start()
 
-    @commands.Cog.listener()
-    async def on_voice_state_update(self, member, before, after):
-        self.client.get_guild(802565984602423367)
-        role = get(member.guild.roles, name="Studying")
-        if not before.channel and after.channel:
-            await member.add_roles(role)
-            try:
-                role = get(member.guild.roles, name=after.channel.name)
-                await member.add_roles(role)
-            except:
-                await member.add_roles(role)
-        if not after.channel and before.channel:
-            await member.remove_roles(role)
-            role = get(member.guild.roles, name=before.channel.name)
-            print(role)
-            await member.remove_roles(role)
-        if after.channel and before.channel:
-            await member.add_roles(role)
-            b = get(member.guild.roles, name=before.channel.name)
-            a = get(member.guild.roles, name=after.channel.name)
-            await member.remove_roles(b)
-            await member.add_roles(a)
+    # @commands.Cog.listener()
+    # async def on_voice_state_update(self, member, before, after):
+    #     self.client.get_guild(802565984602423367)
+    #     role = get(member.guild.roles, name="Studying")
+    #     if not before.channel and after.channel:
+    #         await member.add_roles(role)
+    #         try:
+    #             role = get(member.guild.roles, name=after.channel.name)
+    #             await member.add_roles(role)
+    #         except:
+    #             await member.add_roles(role)
+    #     if not after.channel and before.channel:
+    #         await member.remove_roles(role)
+    #         role = get(member.guild.roles, name=before.channel.name)
+    #         print(role)
+    #         await member.remove_roles(role)
+    #     if after.channel and before.channel:
+    #         await member.add_roles(role)
+    #         b = get(member.guild.roles, name=before.channel.name)
+    #         a = get(member.guild.roles, name=after.channel.name)
+    #         await member.remove_roles(b)
+    #         await member.add_roles(a)
 
     @commands.command(help='Starts Pomodoro timer')
     async def start(self, ctx):
