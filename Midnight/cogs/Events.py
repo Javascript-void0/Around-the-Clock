@@ -8,30 +8,32 @@ class Events(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
+    async def updateMemberCount(self):
         guild = self.client.get_guild(802565984602423367)
-        channel = guild.get_channel(802565985055014953)
-        print(f'{member} has joined the server.')
-        role = get(member.guild.roles, name="awake...")
-        await member.add_roles(role)
-
-        # Welcome
-        verify = guild.get_channel(802566612187349013)
-        lobby = guild.get_channel(802565985055014956)
-        roles = guild.get_channel(845010151508934666)
-        embed = discord.Embed(title = f"Yawn... Oh- Welcome! {member}", description = f"First Verify in {verify.mention} :D.\nThen Grab Some {roles.mention}\nor hangout in {lobby.mention}", color = discord.Color.dark_teal())
-        embed.set_thumbnail(url=member.avatar_url)
-        embed.set_image(url="https://64.media.tumblr.com/752e98a41362e1c7e51c7a50a78c179c/f56cd24a7cd794d6-54/s2048x3072_c0,0,100000,85880/782343118d50eddb426ac93204cac586f38469cd.gif")
-        embed.set_footer(text="Enjoy Your Stay {}".format(member.name), icon_url = "https://media.tenor.com/images/dae19cf6b07682c4acf67dfc880f11f5/tenor.gif")
-        await channel.send(member.mention, embed=embed)
-
-        members = guild.get_channel(847667870098784296)
+        category = guild.get_channel(802565985055014952)
         count = 0
         for member in guild.members:
             if not member.bot:
                 count += 1
-        await members.edit(name=f'➥ {count} Travelers')
+        await category.edit(name=f'﹕{count} Travelers﹕')
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        if member.id != 749422471337476107:
+            guild = self.client.get_guild(802565984602423367)
+            channel = guild.get_channel(802565985055014956)
+            print(f'{member} has joined the server.')
+            role = get(member.guild.roles, name="☕")
+            await member.add_roles(role)
+
+            # Welcome
+            verify = guild.get_channel(802566612187349013)
+            embed = discord.Embed(title = "Yawn... Oh ~ Welcome!", description = f"Verify : {verify.mention}\n\n[ {member.mention} ] Enjoy Your Stay ☕", color = discord.Color(0xF8F0E3))
+            # embed.set_thumbnail(url=member.avatar_url)
+            embed.set_thumbnail(url="https://i.imgur.com/7qz95vU.gif")
+            await channel.send(embed=embed)
+
+        await self.updateMemberCount()
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
