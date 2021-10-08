@@ -15,8 +15,8 @@ class Study(commands.Cog):
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        self.client.get_guild(802565984602423367)
-        role = get(member.guild.roles, id="802744511604195338")
+        guild = self.client.get_guild(802565984602423367)
+        role = get(guild.roles, id=802744511604195338)
         if not before.channel and after.channel:
             await member.add_roles(role)
         if not after.channel and before.channel:
