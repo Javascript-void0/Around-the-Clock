@@ -21,7 +21,7 @@ class Events(commands.Cog):
     async def on_member_join(self, member):
         if member.id != 749422471337476107:
             guild = self.client.get_guild(802565984602423367)
-            channel = guild.get_channel(802565985055014956)
+            channel = guild.get_channel(802565985055014953)
             print(f'{member} has joined the server.')
             role = get(member.guild.roles, name="☕")
             await member.add_roles(role)
