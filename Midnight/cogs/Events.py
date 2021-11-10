@@ -32,7 +32,7 @@ class Events(commands.Cog):
             # embed.set_thumbnail(url=member.avatar_url)
             embed.set_thumbnail(url="https://i.imgur.com/7qz95vU.gif")
             message = await channel.send(embed=embed)
-            await message.add_rection("👋")
+            await message.add_reaction("👋")
 
         await self.updateMemberCount()
 
