@@ -31,7 +31,8 @@ class Events(commands.Cog):
             embed = discord.Embed(title = "Yawn... Oh ~ Welcome!", description = f"Verify : {verify.mention}\n\n[ {member.mention} ] Enjoy Your Stay ☕", color = discord.Color(0xF8F0E3))
             # embed.set_thumbnail(url=member.avatar_url)
             embed.set_thumbnail(url="https://i.imgur.com/7qz95vU.gif")
-            await channel.send(embed=embed)
+            message = await channel.send(embed=embed)
+            await message.add_rection("👋")
 
         await self.updateMemberCount()
 
